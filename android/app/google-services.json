@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "736053778621",
+    "firebase_url": "https://mifadeschats.firebaseio.com",
+    "project_id": "mifadeschats",
+    "storage_bucket": "mifadeschats.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736053778621:android:29cebaabbcf852777effd4",
+        "android_client_info": {
+          "package_name": "com.layouceferie.mifadeschats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736053778621-s4pmcmcnu308gp4sqp5c6723t33tc3os.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg8azTZw3gG3h4M5s4rrN_4cEsp9DI1gw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736053778621-s4pmcmcnu308gp4sqp5c6723t33tc3os.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
