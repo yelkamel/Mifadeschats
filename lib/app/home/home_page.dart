@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mifadeschats/app/home/meals/meals_page.dart';
 import 'package:mifadeschats/app/home/tab_item.dart';
 import 'package:mifadeschats/app/pets/pets_page.dart';
 
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   Map<TabItem, WidgetBuilder> get widgetBuilders {
     return {
       TabItem.pets: (_) => PetsPage(),
-      TabItem.meals: (_) => Container(),
+      TabItem.meals: (context) => MealsPage.create(context),
       TabItem.account: (_) => AccountPage(),
     };
   }
