@@ -32,7 +32,6 @@ class MealsBloc {
       _allMealsStream.map(_createModels);
 
   static List<MealsListTileModel> _createModels(List<MealPet> allMeals) {
-    print(allMeals);
     final allDailyMealsDetails = DailyPetsDetails.all(allMeals);
 
     // total duration across all jobs

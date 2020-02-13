@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-enum gender { male, female }
+const Map<String, String> genderImages = {
+  'female': 'assets/images/cat-female.png',
+  'male': 'assets/images/cat-male.png',
+};
 
 class Pet {
   final String id;

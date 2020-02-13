@@ -30,6 +30,7 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return Scaffold(
+      backgroundColor: Colors.brown,
       appBar: AppBar(
         title: Text('Compte'),
         actions: <Widget>[

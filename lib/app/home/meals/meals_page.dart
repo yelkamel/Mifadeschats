@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/app/pets/list_items_builder.dart';
+import 'package:mifadeschats/common_widgets/list/list_items_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/app/home/meals/meals_bloc.dart';
 import 'package:mifadeschats/app/home/meals/meals_list_tile.dart';
@@ -17,10 +17,7 @@ class MealsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Meals'),
-        elevation: 2.0,
-      ),
+      backgroundColor: Colors.amber,
       body: _buildContents(context),
     );
   }

@@ -7,12 +7,30 @@ class PetlistItem extends StatelessWidget {
       : super(key: key);
   final Pet pet;
   final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(pet.name),
-      trailing: Icon(Icons.chevron_right),
-      onTap: onTap,
+    return Container(
+      padding: EdgeInsets.all(15),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text(
+            pet.name,
+            style: TextStyle(fontSize: 26),
+          ),
+          Column(
+            children: <Widget>[
+              Image.asset(
+                genderImages[pet.gender],
+                height: 30,
+                width: 30,
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

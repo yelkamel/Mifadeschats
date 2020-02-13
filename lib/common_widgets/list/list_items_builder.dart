@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/app/pets/empty_content.dart';
+
+import 'empty_content.dart';
 
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 
 class ListItemBuilder<T> extends StatelessWidget {
-  const ListItemBuilder(
-      {Key key, @required this.snapshot, @required this.itemBuilder})
-      : super(key: key);
+  const ListItemBuilder({
+    Key key,
+    @required this.snapshot,
+    @required this.itemBuilder,
+    this.lastItem,
+  }) : super(key: key);
 
   final AsyncSnapshot<List<T>> snapshot;
   final ItemWidgetBuilder<T> itemBuilder;
+  final Widget lastItem;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +45,11 @@ class ListItemBuilder<T> extends StatelessWidget {
         height: 0.5,
       ),
       itemBuilder: (context, index) {
-        if (index == 0 || index == items.length + 1) {
+        if (index == 0) {
           return Container();
+        }
+        if (index == items.length + 1) {
+          return lastItem;
         }
         return itemBuilder(context, items[index - 1]);
       },

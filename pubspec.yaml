@@ -28,6 +28,13 @@ dependencies:
   rxdart: ^0.22.4
   firebase_auth_web: ^0.1.2
 
+  fab_circular_menu: ^0.1.4
+  page_transition: "^1.1.5"
+  switches_kit: ^0.0.1
+  pimp_my_button:
+    git:
+      url: git://github.com/Norbert515/pimp_my_button.git
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,8 +57,10 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-   - images/google-logo.png
-   - images/facebook-logo.png
+   - assets/images/google-logo.png
+   - assets/images/facebook-logo.png
+   - assets/images/cat-male.png
+   - assets/images/cat-female.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

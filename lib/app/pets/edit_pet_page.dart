@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mifadeschats/app/home/models/pet.dart';
+import 'package:mifadeschats/common_widgets/button/back_down.dart';
 import 'package:mifadeschats/common_widgets/platform_alert_dialog.dart';
 import 'package:mifadeschats/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
@@ -37,6 +38,7 @@ class _EditPetPageState extends State<EditPetPage> {
 
   String _name;
   int _age;
+  String _gender;
 
   @required
   void initState() {
@@ -45,6 +47,19 @@ class _EditPetPageState extends State<EditPetPage> {
     if (widget.pet != null) {
       _name = widget.pet.name;
       _age = widget.pet.age;
+      _gender = widget.pet.gender;
+    }
+  }
+
+  Future<void> _delete() async {
+    try {
+      await widget.database.deletePet(widget.pet);
+      Navigator.of(context).pop();
+    } on PlatformException catch (e) {
+      PlatformExceptionAlertDialog(
+        title: 'une Erreur est survenu',
+        exception: e,
+      ).show(context);
     }
   }
 
@@ -63,6 +78,9 @@ class _EditPetPageState extends State<EditPetPage> {
     setState(() {
       _isLoading = true;
     });
+
+    print(_gender);
+
     if (_validateAndSave()) {
       try {
         final pets = await widget.database.petsStream().first;
@@ -70,6 +88,7 @@ class _EditPetPageState extends State<EditPetPage> {
         if (widget.pet != null) {
           allNames.remove(widget.pet.name);
         }
+
         if (allNames.contains(_name)) {
           PlatformAlertDialog(
             title: 'Nom déjà présent',
@@ -78,8 +97,10 @@ class _EditPetPageState extends State<EditPetPage> {
           ).show(context);
         } else {
           final id = widget.pet?.id ?? documentIdFromCurrentDate();
-          final pet = Pet(id: id, name: _name, age: _age, gender: 'male');
+          final pet = Pet(id: id, name: _name, age: _age, gender: _gender);
+          print(pet.gender);
           await widget.database.setPet(pet);
+
           Navigator.of(context).pop();
         }
       } on PlatformException catch (e) {
@@ -96,30 +117,49 @@ class _EditPetPageState extends State<EditPetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2.0,
-        title: Text('Ajouter un Animal'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit, color: Colors.white),
-            onPressed: !_isLoading ? _submit : null,
-          ),
-        ],
-      ),
-      body: _buildContents(),
-      backgroundColor: Colors.grey[200],
+      body: _buildContents(context),
+      backgroundColor: Colors.orange[200],
     );
   }
 
-  Widget _buildContents() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Card(
-          child:
-              Padding(padding: const EdgeInsets.all(16.0), child: _buildForm()),
+  Widget _buildContents(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            elevation: 8,
+            color: Colors.white70,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildForm(),
+                ),
+                ButtonBar(
+                  children: <Widget>[
+                    FlatButton(
+                      textColor: Colors.orange[600],
+                      child: const Text('Supprimer'),
+                      onPressed: _delete,
+                    ),
+                    FlatButton(
+                      textColor: Colors.orange[600],
+                      child: const Text('Modifier'),
+                      onPressed: !_isLoading ? _submit : null,
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
-      ),
+        BackDown(onTap: () {
+          Navigator.of(context).pop();
+        })
+      ],
     );
   }
 
@@ -139,7 +179,6 @@ class _EditPetPageState extends State<EditPetPage> {
         FocusScope.of(context).requestFocus(_ageFocusNode);
         break;
       default:
-        FocusScope.of(context).requestFocus(_nameFocusNode);
     }
   }
 
@@ -153,6 +192,7 @@ class _EditPetPageState extends State<EditPetPage> {
           enabled: _isLoading == false,
         ),
         onSaved: (value) => _name = value,
+        validator: (input) => input.length == 0 ? 'ajoute un blase' : null,
         onEditingComplete: () => _editingComplete('email'),
       ),
       TextFormField(
@@ -163,6 +203,46 @@ class _EditPetPageState extends State<EditPetPage> {
             TextInputType.numberWithOptions(signed: false, decimal: false),
         onSaved: (value) => _age = int.tryParse(value) ?? 0,
         onEditingComplete: () => _editingComplete('age'),
+      ),
+      FormField(
+        onSaved: (value) {
+          _gender = value;
+        },
+        initialValue: _gender != null ? _gender : 'female',
+        builder: (FormFieldState state) {
+          return InputDecorator(
+            decoration: InputDecoration(
+              labelText: 'Sexe',
+            ),
+            isEmpty: _gender == '',
+            child: new DropdownButtonHideUnderline(
+              child: new DropdownButton(
+                value: _gender,
+                isDense: true,
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    _gender = value;
+                  });
+                },
+                items: ['male', 'female'].map((tag) {
+                  return DropdownMenuItem(
+                    value: tag,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Image.asset(
+                            genderImages[tag],
+                            height: 30,
+                            width: 30,
+                          ),
+                        ]),
+                  );
+                }).toList(),
+              ),
+            ),
+          );
+        },
       ),
     ];
   }

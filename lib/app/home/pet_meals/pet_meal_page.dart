@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mifadeschats/app/home/models/pet.dart';
 import 'package:mifadeschats/app/home/models/meal.dart';
 import 'package:mifadeschats/app/pets/edit_pet_page.dart';
-import 'package:mifadeschats/app/pets/list_items_builder.dart';
+import 'package:mifadeschats/common_widgets/list/list_items_builder.dart';
 import 'package:mifadeschats/services/database.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import 'meal_list_item.dart';
@@ -19,12 +20,10 @@ class PetMealsPage extends StatelessWidget {
   static Future<void> show(BuildContext context, Pet pet) async {
     final Database database = Provider.of<Database>(context);
 
-    await Navigator.of(context).push(
-      CupertinoPageRoute(
-        fullscreenDialog: false,
-        builder: (context) => PetMealsPage(database: database, pet: pet),
-      ),
-    );
+    await Navigator.of(context).push(PageTransition(
+        type: PageTransitionType.scale,
+        alignment: Alignment(1.0, 1.0),
+        child: PetMealsPage(database: database, pet: pet)));
   }
 
   Future<void> _deleteMeal(BuildContext context, Meal meal) async {
