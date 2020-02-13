@@ -30,16 +30,23 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return Scaffold(
-      backgroundColor: Colors.brown,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Compte'),
+        title: Text(
+          'Compte',
+          style: TextStyle(
+            fontSize: 24.0,
+            color: Colors.orange[900],
+          ),
+        ),
+        backgroundColor: Colors.orangeAccent,
         actions: <Widget>[
           FlatButton(
             child: Text(
               'Déco',
               style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.white,
+                fontSize: 24.0,
+                color: Colors.orange[900],
               ),
             ),
             onPressed: () => _confirmSignOut(context),

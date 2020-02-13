@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/app/home/models/pet.dart';
+import 'package:mifadeschats/models/pet.dart';
 
 class PetlistItem extends StatelessWidget {
   const PetlistItem({Key key, @required this.pet, this.onTap})

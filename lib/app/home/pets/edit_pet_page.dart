@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mifadeschats/app/home/models/pet.dart';
-import 'package:mifadeschats/common_widgets/button/back_down.dart';
+import 'package:mifadeschats/common_widgets/button/back_cross.dart';
+import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/common_widgets/platform_alert_dialog.dart';
 import 'package:mifadeschats/common_widgets/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
+import 'package:page_transition/page_transition.dart';
 
 class EditPetPage extends StatefulWidget {
   const EditPetPage({Key key, @required this.database, this.pet})
@@ -15,12 +16,14 @@ class EditPetPage extends StatefulWidget {
   static Future<void> show(BuildContext context,
       {Database database, Pet pet}) async {
     await Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
-        builder: (context) => EditPetPage(
+      PageTransition(
+        type: PageTransitionType.downToUp,
+        alignment: Alignment(0.0, 1.0),
+        duration: Duration(milliseconds: 500),
+        child: EditPetPage(
           database: database,
           pet: pet,
         ),
-        fullscreenDialog: true,
       ),
     );
   }
@@ -117,8 +120,19 @@ class _EditPetPageState extends State<EditPetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildContents(context),
-      backgroundColor: Colors.orange[200],
+      backgroundColor: Colors.orangeAccent,
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          Positioned(
+              top: 80,
+              right: 40,
+              child: BackCross(onTap: () {
+                Navigator.of(context).pop();
+              })),
+          _buildContents(context),
+        ],
+      ),
     );
   }
 
@@ -140,14 +154,16 @@ class _EditPetPageState extends State<EditPetPage> {
                 ),
                 ButtonBar(
                   children: <Widget>[
+                    if (widget.pet != null)
+                      FlatButton(
+                        textColor: Colors.orange[600],
+                        child: const Text('Supprimer'),
+                        onPressed: _delete,
+                      ),
                     FlatButton(
                       textColor: Colors.orange[600],
-                      child: const Text('Supprimer'),
-                      onPressed: _delete,
-                    ),
-                    FlatButton(
-                      textColor: Colors.orange[600],
-                      child: const Text('Modifier'),
+                      child:
+                          Text(widget.pet == null ? 'Enregistrer' : 'Modifier'),
                       onPressed: !_isLoading ? _submit : null,
                     )
                   ],
@@ -156,9 +172,6 @@ class _EditPetPageState extends State<EditPetPage> {
             ),
           ),
         ),
-        BackDown(onTap: () {
-          Navigator.of(context).pop();
-        })
       ],
     );
   }

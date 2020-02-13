@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:mifadeschats/app/home/models/meal.dart';
-import 'package:mifadeschats/app/home/models/pet.dart';
+import 'package:mifadeschats/models/meal.dart';
+import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/services/api_path.dart';
 import 'package:mifadeschats/services/firestore_service.dart';
 
@@ -35,9 +35,9 @@ class FirestoreDatabase implements Database {
   Future<void> deletePet(Pet pet) async {
     final allMeal = await mealsStream(pet: pet).first;
     for (Meal meal in allMeal) {
-      if (meal.petId == pet.id) {
-        await deleteMeal(meal);
-      }
+      // if (meal.petId == pet.id) {
+      //   await deleteMeal(meal);
+      // }
     }
     // delete pet
     await _service.deleteData(path: APIPath.pet(uid, pet.id));
@@ -71,7 +71,10 @@ class FirestoreDatabase implements Database {
         queryBuilder: pet != null
             ? (query) => query.where('petId', isEqualTo: pet.id)
             : null,
-        builder: (data, documentID) => Meal.fromMap(data, documentID),
-        sort: (lhs, rhs) => rhs.start.compareTo(lhs.start),
+        builder: (data, documentID) {
+          // print("documentID: $documentID - data: $data");
+          return Meal.fromMap(data, documentID);
+        },
+        // sort: (lhs, rhs) => rhs.start.compareTo(lhs.start),
       );
 }

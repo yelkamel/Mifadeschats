@@ -1,10 +1,11 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:mifadeschats/app/home/meals/meals_page.dart';
-import 'package:mifadeschats/app/home/tab_item.dart';
-import 'package:mifadeschats/app/pets/pets_page.dart';
+import 'package:mifadeschats/app/home/pets/pets_page.dart';
+import 'package:mifadeschats/common_widgets/menu/slider_side_menu.dart';
 
 import 'account/account_page.dart';
-import 'cupertino_home_scaffold.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,40 +13,58 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TabItem _currentTab = TabItem.pets;
+  int _currentIndex = 1;
 
-  final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
-    TabItem.pets: GlobalKey<NavigatorState>(),
-    TabItem.meals: GlobalKey<NavigatorState>(),
-    TabItem.account: GlobalKey<NavigatorState>(),
-  };
-
-  Map<TabItem, WidgetBuilder> get widgetBuilders {
-    return {
-      TabItem.pets: (_) => PetsPage(),
-      TabItem.meals: (context) => MealsPage.create(context),
-      TabItem.account: (_) => AccountPage(),
-    };
+  Widget _buildPage(BuildContext context) {
+    switch (_currentIndex) {
+      case 0:
+        return PetsPage();
+      case 1:
+        return MealsPage();
+      default:
+        return AccountPage();
+    }
   }
 
-  void _select(TabItem tabItem) {
-    if (tabItem == _currentTab) {
-      // navigatorKeys[tabItem].currentState.popUntil((route) => route.isFirst);
-    } else {
-      setState(() => _currentTab = tabItem);
-    }
+  void setPage(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async =>
-          !await navigatorKeys[_currentTab].currentState.maybePop(),
-      child: CupertinoHomeScaffold(
-        currentTab: _currentTab,
-        onSelectedTab: _select,
-        widgetBuilders: widgetBuilders,
-        navigatorKeys: navigatorKeys,
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          _buildPage(context),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: CurvedNavigationBar(
+              color: Colors.orangeAccent,
+              buttonBackgroundColor: Colors.orangeAccent,
+              backgroundColor: Colors.transparent,
+              items: <Widget>[
+                Icon(
+                  Icons.pets,
+                  size: 30,
+                  color: Colors.orange[900],
+                ),
+                Icon(
+                  Icons.fastfood,
+                  size: 30,
+                  color: Colors.orange[900],
+                ),
+                Icon(
+                  Icons.person,
+                  size: 30,
+                  color: Colors.orange[900],
+                ),
+              ],
+              onTap: setPage,
+            ),
+          )
+        ],
       ),
     );
   }

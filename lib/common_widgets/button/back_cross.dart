@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pimp_my_button/pimp_my_button.dart';
 
-class BackDown extends StatelessWidget {
+class BackCross extends StatelessWidget {
   final Function onTap;
 
-  const BackDown({Key key, this.onTap}) : super(key: key);
+  const BackCross({Key key, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

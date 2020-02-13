@@ -25,10 +25,13 @@ dependencies:
   provider: ^3.1.0+1
   cloud_firestore: ^0.12.9+5
   intl: ^0.16.1
-  rxdart: ^0.22.4
   firebase_auth_web: ^0.1.2
 
-  fab_circular_menu: ^0.1.4
+  flutter_slidable: "^0.5.4"
+  flutter_gradients: ^0.0.3
+  curved_navigation_bar: ^0.3.2
+  equatable: ^1.1.0
+  bloc: ^3.0.0
   page_transition: "^1.1.5"
   switches_kit: ^0.0.1
   pimp_my_button:
