@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
-import 'package:mifadeschats/common_widgets/platform_alert_dialog.dart';
+import 'package:mifadeschats/components/platform_alert_dialog.dart';
 
 class PlatformExceptionAlertDialog extends PlatformAlertDialog {
   PlatformExceptionAlertDialog({

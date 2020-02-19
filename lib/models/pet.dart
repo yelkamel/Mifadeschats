@@ -20,7 +20,12 @@ class Pet {
     final int age = data['age'];
     final String gender = data['gender'];
 
-    return Pet(id: documentId, gender: gender, age: age, name: name);
+    return Pet(
+      id: documentId,
+      gender: gender,
+      age: age,
+      name: name,
+    );
   }
 
   Pet(

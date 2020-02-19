@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/common_widgets/format.dart';
+import 'package:mifadeschats/components/format.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mifadeschats/models/meal.dart';
 
@@ -32,21 +32,20 @@ class MealItem extends StatelessWidget {
               children: <Widget>[
                 Text(Format.date(meal.date),
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black87,
+                      color: Theme.of(context).primaryColor,
+                      fontFamily: 'Apercu',
+                      fontSize: 22,
                     )),
-                if (meal.comment != null)
-                  Text(
-                    meal.comment,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black87,
-                    ),
-                    textAlign: TextAlign.right,
-                  ),
               ],
             ),
-            Text(Format.time(meal.date), style: TextStyle(fontSize: 20)),
+            Text(
+              Format.time(meal.date),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontFamily: 'Apercu',
+                fontSize: 24,
+              ),
+            ),
           ],
         ),
       ),

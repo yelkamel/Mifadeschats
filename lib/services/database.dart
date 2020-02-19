@@ -5,6 +5,7 @@ import 'package:mifadeschats/models/meal.dart';
 import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/services/api_path.dart';
 import 'package:mifadeschats/services/firestore_service.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class Database {
   Future<void> setPet(Pet pet);
@@ -17,7 +18,10 @@ abstract class Database {
   Stream<List<Meal>> mealsStream({Pet pet});
 }
 
-String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
+String documentIdFromCurrentDate() {
+  String id = Uuid().v1();
+  return id;
+}
 
 class FirestoreDatabase implements Database {
   FirestoreDatabase({@required this.uid}) : assert(uid != null);

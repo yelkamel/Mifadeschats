@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/common_widgets/avatar.dart';
-import 'package:mifadeschats/common_widgets/platform_alert_dialog.dart';
+import 'package:mifadeschats/components/avatar.dart';
+import 'package:mifadeschats/components/card/card_dark_mode_switch.dart';
+import 'package:mifadeschats/components/platform_alert_dialog.dart';
+import 'package:mifadeschats/data/themes/theme_changer.dart';
 import 'package:mifadeschats/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -16,48 +18,81 @@ class AccountPage extends StatelessWidget {
 
   Future<void> _confirmSignOut(BuildContext context) async {
     final didRequestSignOut = await PlatformAlertDialog(
-      title: 'Déconexion',
-      content: 'Are you sure that you want to logout?',
-      cancelActionText: 'Cancel',
-      defaultActionText: 'Logout',
+      title: 'Déconnexion',
+      content: 'Êtes-vous sur de vouloir vous déconnecter ?',
+      cancelActionText: 'Annuler',
+      defaultActionText: 'Déconnexion',
     ).show(context);
     if (didRequestSignOut == true) {
       _signOut(context);
     }
   }
 
+  Widget _buildSwitchDark() {
+    return Container(
+      alignment: Alignment.center,
+      height: 50,
+      width: 100,
+      child: Container(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'Compte',
-          style: TextStyle(
-            fontSize: 24.0,
-            color: Colors.orange[900],
-          ),
-        ),
-        backgroundColor: Colors.orangeAccent,
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              'Déco',
-              style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.orange[900],
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
+          actions: <Widget>[
+            GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.exit_to_app,
+                  size: 40,
+                  color: Colors.white70,
+                ),
               ),
-            ),
-            onPressed: () => _confirmSignOut(context),
+              onTap: () => _confirmSignOut(context),
+            )
+          ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(130),
+            child: _builderUserInfo(user),
           ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(130),
-          child: _builderUserInfo(user),
         ),
-      ),
-    );
+        body: Column(
+          children: <Widget>[
+            CardDarkModeSwitch(
+              value: _themeChanger.isDark(),
+              onTap: (value) => _themeChanger.switchToDark(value),
+            )
+          ],
+        )
+
+        /* ListView.builder(
+        padding: EdgeInsets.all(8),
+        itemCount: AppTheme.values.length,
+        itemBuilder: (context, index) {
+          final AppTheme itemApptheme = AppTheme.values[index];
+
+          return Card(
+            color: appThemeData[itemApptheme].primaryColor,
+            child: ListTile(
+              title: Text(
+                itemApptheme.toString(),
+                style: appThemeData[itemApptheme].textTheme.body1,
+              ),
+              onTap: () {
+                _themeChanger.setTheme(appThemeData[itemApptheme]);
+              },
+            ),
+          );
+        },
+      ), */
+        );
   }
 
   Widget _builderUserInfo(User user) {

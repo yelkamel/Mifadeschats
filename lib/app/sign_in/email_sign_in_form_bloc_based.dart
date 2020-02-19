@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/app/sign_in/email_sign_in_bloc.dart';
 import 'package:mifadeschats/app/sign_in/email_sign_in_model.dart';
-import 'package:mifadeschats/common_widgets/form_submit_button.dart';
-import 'package:mifadeschats/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/components/form_submit_button.dart';
+import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/auth.dart';
 
 class EmailSignInFormBlocBased extends StatefulWidget {
@@ -70,14 +70,14 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
   List<Widget> _buildChildren(EmailSignInModel model) {
     return [
       _buildEmailTextField(model),
-      SizedBox(height: 8.0),
+      SizedBox(height: 10.0),
       _buildPasswordTextField(model),
-      SizedBox(height: 8.0),
+      SizedBox(height: 10.0),
       FormSubmitButton(
         text: model.primaryButtonText,
         onPressed: model.canSubmit ? _submit : null,
       ),
-      SizedBox(height: 8.0),
+      SizedBox(height: 10.0),
       FlatButton(
         child: Text(model.secondaryButtonText),
         onPressed: !model.isLoading ? _toggleFormType : null,
@@ -122,18 +122,19 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<EmailSignInModel>(
-        stream: widget.bloc.modelStream,
-        initialData: EmailSignInModel(),
-        builder: (context, snapshot) {
-          final EmailSignInModel model = snapshot.data;
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: _buildChildren(model),
-            ),
-          );
-        });
+      stream: widget.bloc.modelStream,
+      initialData: EmailSignInModel(),
+      builder: (context, snapshot) {
+        final EmailSignInModel model = snapshot.data;
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: _buildChildren(model),
+          ),
+        );
+      },
+    );
   }
 }

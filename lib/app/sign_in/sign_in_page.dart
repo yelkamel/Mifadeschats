@@ -5,7 +5,7 @@ import 'package:mifadeschats/app/sign_in/email_sign_in_page.dart';
 import 'package:mifadeschats/app/sign_in/sign_in_manager.dart';
 import 'package:mifadeschats/app/sign_in/sign_in_button.dart';
 import 'package:mifadeschats/app/sign_in/social_sign_in_button.dart';
-import 'package:mifadeschats/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
@@ -81,13 +81,11 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Time Tracker'),
-        elevation: 2.0,
+    return SafeArea(
+      child: Scaffold(
+        body: _buildContent(context),
+        backgroundColor: Theme.of(context).backgroundColor,
       ),
-      body: _buildContent(context),
-      backgroundColor: Colors.grey[200],
     );
   }
 
@@ -100,61 +98,51 @@ class SignInPage extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             height: 50.0,
-            child: _buildHeader(),
+            child: _buildHeader(context),
           ),
           SizedBox(height: 48.0),
           SocialSignInButton(
             assetName: 'assets/images/google-logo.png',
-            text: 'Sign in with Google',
-            textColor: Colors.black87,
+            text: 'Google',
+            textColor: Colors.black54,
             color: Colors.white,
             onPressed: isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(height: 8.0),
           SocialSignInButton(
             assetName: 'assets/images/facebook-logo.png',
-            text: 'Sign in with Facebook',
-            textColor: Colors.white,
+            text: 'Facebook',
+            textColor: Colors.white70,
             color: Color(0xFF334D92),
             onPressed: isLoading ? null : () => _signInWithFacebook(context),
           ),
           SizedBox(height: 8.0),
           SignInButton(
-            text: 'Sign in with email',
-            textColor: Colors.white,
-            color: Colors.teal[700],
+            text: 'Email',
+            textColor: Theme.of(context).canvasColor,
+            color: Theme.of(context).accentColor,
             onPressed: isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(height: 8.0),
-          Text(
-            'or',
-            style: TextStyle(fontSize: 14.0, color: Colors.black87),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 8.0),
-          SignInButton(
-            text: 'Go anonymous',
-            textColor: Colors.black,
-            color: Colors.lime[300],
-            onPressed: isLoading ? null : () => _signInAnonymously(context),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     if (isLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
     return Text(
-      'Sign in',
+      'Connexion',
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 32.0,
         fontWeight: FontWeight.w600,
+        color: Theme.of(context).primaryColor,
+        fontFamily: 'Apercu',
       ),
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/common_widgets/button/awesome_button.dart';
-import 'package:mifadeschats/common_widgets/list/list_items_builder.dart';
-import 'package:mifadeschats/common_widgets/reponsive_safe_area.dart';
+import 'package:mifadeschats/components/button/awesome_button.dart';
+import 'package:mifadeschats/components/format.dart';
+import 'package:mifadeschats/components/list/list_items_builder.dart';
+import 'package:mifadeschats/components/reponsive_safe_area.dart';
 import 'package:mifadeschats/models/meal.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/services/database.dart';
@@ -44,7 +45,7 @@ class MealsPage extends StatelessWidget {
     return Positioned(
       child: AwesomeButton(
         blurRadius: 10.0,
-        splashColor: Colors.orange[400],
+        splashColor: Theme.of(context).buttonColor,
         borderRadius: BorderRadius.circular(37.5),
         height: 40.0,
         width: 100,
@@ -55,8 +56,9 @@ class MealsPage extends StatelessWidget {
         child: Text(
           "Miam",
           style: TextStyle(
-            color: Colors.white70,
-            fontSize: 22.0,
+            color: Theme.of(context).accentColor,
+            fontFamily: 'Apercu',
+            fontSize: 14,
           ),
         ),
       ),
@@ -70,7 +72,18 @@ class MealsPage extends StatelessWidget {
     final database = Provider.of<Database>(context);
 
     return Scaffold(
-      backgroundColor: Colors.orange[200],
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        title: Text(
+          Format.date(new DateTime.now()),
+          style: TextStyle(
+            color: Colors.white70,
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+          ),
+        ),
+      ),
       body: ResponsiveSafeArea(builder: (context, size) {
         return Stack(
           alignment: Alignment.bottomCenter,
@@ -94,10 +107,11 @@ class MealsPage extends StatelessWidget {
             // return MealsListTile(model: model);
 
             return MealItem(
-                meal: model,
-                onDelete: () async {
-                  await database.deleteMeal(model);
-                });
+              meal: model,
+              onDelete: () async {
+                await database.deleteMeal(model);
+              },
+            );
           },
         );
       },

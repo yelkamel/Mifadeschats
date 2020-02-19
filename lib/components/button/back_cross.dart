@@ -23,7 +23,7 @@ class BackCross extends StatelessWidget {
               color: Colors.white38,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.orangeAccent,
+                  color: Theme.of(context).primaryColorLight,
                   blurRadius: 30.0,
                   offset: Offset(1.0, 1.0),
                 ),
@@ -32,7 +32,7 @@ class BackCross extends StatelessWidget {
             child: Icon(
               Icons.arrow_downward,
               size: 40,
-              color: Colors.orange[600],
+              color: Theme.of(context).accentColor,
             ),
           ),
         );

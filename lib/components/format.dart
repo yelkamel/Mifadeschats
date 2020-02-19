@@ -9,7 +9,7 @@ class Format {
   }
 
   static String date(DateTime date) {
-    return DateFormat.yMMMd().format(date);
+    return DateFormat.MMMd().format(date);
   }
 
   static String time(DateTime date) {

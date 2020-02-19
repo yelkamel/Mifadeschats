@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/common_widgets/custom_raised_button.dart';
+import 'package:mifadeschats/components/custom_raised_button.dart';
 
 class SocialSignInButton extends CustomRaisedButton {
   SocialSignInButton({

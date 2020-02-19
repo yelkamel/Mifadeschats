@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:flutter/services.dart';
-import 'package:mifadeschats/common_widgets/button/back_cross.dart';
+import 'package:mifadeschats/components/button/back_cross.dart';
+import 'package:mifadeschats/components/photo/image_capture.dart';
 import 'package:mifadeschats/models/pet.dart';
-import 'package:mifadeschats/common_widgets/platform_alert_dialog.dart';
-import 'package:mifadeschats/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/components/platform_alert_dialog.dart';
+import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -42,6 +44,7 @@ class _EditPetPageState extends State<EditPetPage> {
   String _name;
   int _age;
   String _gender;
+  String _id;
 
   @required
   void initState() {
@@ -51,6 +54,7 @@ class _EditPetPageState extends State<EditPetPage> {
       _name = widget.pet.name;
       _age = widget.pet.age;
       _gender = widget.pet.gender;
+      _id = widget.pet?.id ?? documentIdFromCurrentDate();
     }
   }
 
@@ -82,8 +86,6 @@ class _EditPetPageState extends State<EditPetPage> {
       _isLoading = true;
     });
 
-    print(_gender);
-
     if (_validateAndSave()) {
       try {
         final pets = await widget.database.petsStream().first;
@@ -99,9 +101,7 @@ class _EditPetPageState extends State<EditPetPage> {
             defaultActionText: "d'accord",
           ).show(context);
         } else {
-          final id = widget.pet?.id ?? documentIdFromCurrentDate();
-          final pet = Pet(id: id, name: _name, age: _age, gender: _gender);
-          print(pet.gender);
+          final pet = Pet(id: _id, name: _name, age: _age, gender: _gender);
           await widget.database.setPet(pet);
 
           Navigator.of(context).pop();
@@ -120,7 +120,7 @@ class _EditPetPageState extends State<EditPetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orangeAccent,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: <Widget>[
@@ -137,15 +137,29 @@ class _EditPetPageState extends State<EditPetPage> {
   }
 
   Widget _buildContents(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Padding(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: InkWell(
+          child: Transform.rotate(
+            angle: -pi / 2,
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.red,
+            ),
+          ),
+          onTap: () => Navigator.of(context).pop(),
+        ),
+      ),
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: SingleChildScrollView(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
-            elevation: 8,
-            color: Colors.white70,
+            elevation: Theme.of(context).cardTheme.elevation,
+            color: Theme.of(context).cardTheme.color,
+            shape: Theme.of(context).cardTheme.shape,
             child: Column(
               children: <Widget>[
                 Padding(
@@ -156,12 +170,12 @@ class _EditPetPageState extends State<EditPetPage> {
                   children: <Widget>[
                     if (widget.pet != null)
                       FlatButton(
-                        textColor: Colors.orange[600],
+                        textColor: Theme.of(context).accentColor,
                         child: const Text('Supprimer'),
                         onPressed: _delete,
                       ),
                     FlatButton(
-                      textColor: Colors.orange[600],
+                      textColor: Theme.of(context).accentColor,
                       child:
                           Text(widget.pet == null ? 'Enregistrer' : 'Modifier'),
                       onPressed: !_isLoading ? _submit : null,
@@ -172,7 +186,7 @@ class _EditPetPageState extends State<EditPetPage> {
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -197,6 +211,9 @@ class _EditPetPageState extends State<EditPetPage> {
 
   List<Widget> _buildChildren() {
     return [
+      ImageCapture(
+        path: 'images/pets/${_id}.png',
+      ),
       TextFormField(
         focusNode: _nameFocusNode,
         initialValue: _name,
@@ -231,9 +248,7 @@ class _EditPetPageState extends State<EditPetPage> {
             child: new DropdownButtonHideUnderline(
               child: new DropdownButton(
                 value: _gender,
-                isDense: true,
                 onChanged: (value) {
-                  print(value);
                   setState(() {
                     _gender = value;
                   });
@@ -241,15 +256,11 @@ class _EditPetPageState extends State<EditPetPage> {
                 items: ['male', 'female'].map((tag) {
                   return DropdownMenuItem(
                     value: tag,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Image.asset(
-                            genderImages[tag],
-                            height: 30,
-                            width: 30,
-                          ),
-                        ]),
+                    child: Image.asset(
+                      genderImages[tag],
+                      height: 50,
+                      width: 50,
+                    ),
                   );
                 }).toList(),
               ),

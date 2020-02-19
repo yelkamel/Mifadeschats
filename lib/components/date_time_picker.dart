@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/common_widgets/input_dropdown.dart';
+import 'package:mifadeschats/components/input_dropdown.dart';
 
 import 'format.dart';
 

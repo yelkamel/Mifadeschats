@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mifadeschats/components/list/carrousel_items_builder.dart';
 import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/app/home/pets/edit_pet_page.dart';
 import 'package:mifadeschats/app/home/pets/pet_card.dart';
-import 'package:mifadeschats/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
+import 'package:mifadeschats/services/storage.dart';
 import 'package:provider/provider.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class PetsPage extends StatefulWidget {
   @override
@@ -45,56 +48,81 @@ class _PetsPageState extends State<PetsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[200],
+      backgroundColor: Theme.of(context).backgroundColor,
       body: _buildContents(context),
     );
   }
 
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context);
+    final storage = Provider.of<Storage>(context);
+
     return StreamBuilder<List<Pet>>(
         stream: database.petsStream(),
         builder: (context, snapshot) {
-          List slideList = snapshot.data.toList();
-
-          return PageView.builder(
-              controller: _ctrl,
-              itemCount: slideList.length + 2,
-              itemBuilder: (context, index) {
-                bool active = index == currentPage;
-                if (index == 0) {
-                  return _buildTagPage();
-                } else {
-                  Pet pet = index != slideList.length + 1
-                      ? slideList[index - 1]
-                      : null;
-                  return PetCardItem(
-                      pet: pet,
-                      active: active,
-                      onTap: () {
-                        /// PetMealsPage.show(context, pet),
-                        EditPetPage.show(context, database: database, pet: pet);
-                      });
-                }
-              });
+          return CarouselItemBuilder(
+            snapshot: snapshot,
+            itemBuilder: (context, item, active) {
+              print("item: ${item}");
+              return PetCardItem(
+                storage: storage,
+                pet: item,
+                active: active,
+                onTap: () {
+                  /// PetMealsPage.show(context, pet),
+                  EditPetPage.show(context, database: database, pet: item);
+                },
+              );
+            },
+            firstItem: _buildTagPage(context),
+            lastItem: PetCardItem.emptyContent(
+              context,
+              () => EditPetPage.show(context, database: database, pet: null),
+            ),
+          );
         });
   }
 }
 
-Widget _buildTagPage() {
+Widget _buildTagPage(BuildContext context) {
   return Container(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Les chats\n de la mifa',
-          style: TextStyle(
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-            color: Colors.orange[900],
-          ),
+        Row(
+          children: <Widget>[
+            Text(
+              'Les  ',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Apercu',
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            RotateAnimatedTextKit(
+              totalRepeatCount: 4,
+              pause: Duration(milliseconds: 1000),
+              text: ['chats', 'chiens', 'hamsters', 'oiseaux'],
+              textStyle: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Apercu',
+                color: Theme.of(context).primaryColor,
+              ),
+              displayFullTextOnTap: true,
+            ),
+          ],
         ),
+        Text(
+          'de la mifa',
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontFamily: 'Apercu',
+            fontSize: 26,
+          ),
+        )
       ],
     ),
   );

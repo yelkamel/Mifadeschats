@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mifadeschats/app/home/meals/meals_page.dart';
 import 'package:mifadeschats/app/home/pets/pets_page.dart';
-import 'package:mifadeschats/common_widgets/menu/slider_side_menu.dart';
+import 'package:mifadeschats/components/menu/slider_side_menu.dart';
 
 import 'account/account_page.dart';
 
@@ -13,7 +13,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 1;
+  int _currentIndex;
+
+  @required
+  void initState() {
+    super.initState();
+    _currentIndex = 2;
+  }
 
   Widget _buildPage(BuildContext context) {
     switch (_currentIndex) {
@@ -41,24 +47,25 @@ class _HomePageState extends State<HomePage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: CurvedNavigationBar(
-              color: Colors.orangeAccent,
-              buttonBackgroundColor: Colors.orangeAccent,
+              color: Theme.of(context).bottomAppBarColor,
+              buttonBackgroundColor: Theme.of(context).bottomAppBarColor,
               backgroundColor: Colors.transparent,
+              index: _currentIndex,
               items: <Widget>[
                 Icon(
                   Icons.pets,
-                  size: 30,
-                  color: Colors.orange[900],
+                  size: Theme.of(context).accentIconTheme.size,
+                  color: Theme.of(context).accentIconTheme.color,
                 ),
                 Icon(
                   Icons.fastfood,
-                  size: 30,
-                  color: Colors.orange[900],
+                  size: Theme.of(context).accentIconTheme.size,
+                  color: Theme.of(context).accentIconTheme.color,
                 ),
                 Icon(
                   Icons.person,
-                  size: 30,
-                  color: Colors.orange[900],
+                  size: Theme.of(context).accentIconTheme.size,
+                  color: Theme.of(context).accentIconTheme.color,
                 ),
               ],
               onTap: setPage,

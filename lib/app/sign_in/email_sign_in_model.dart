@@ -18,14 +18,14 @@ class EmailSignInModel with EmailAndPasswordValidators {
 
   String get primaryButtonText {
     return formType == EmailSignInFormType.signIn
-        ? 'Sign in'
-        : 'Create an account';
+        ? "C'est parti"
+        : 'Crée un compte';
   }
 
   String get secondaryButtonText {
     return formType == EmailSignInFormType.signIn
-        ? 'Need an account? Register'
-        : 'Have an account? Sign in';
+        ? "Besoin d'un compte ? clicker ici"
+        : "Vous avez un compte ? Connectez-vous";
   }
 
   bool get canSubmit {

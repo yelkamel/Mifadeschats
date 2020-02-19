@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/app/sign_in/email_sign_in_model.dart';
 import 'package:mifadeschats/app/sign_in/validators.dart';
-import 'package:mifadeschats/common_widgets/form_submit_button.dart';
-import 'package:mifadeschats/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/components/form_submit_button.dart';
+import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/auth.dart';
 import 'package:flutter/services.dart';
 

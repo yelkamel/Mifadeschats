@@ -111,7 +111,7 @@ class _SliderSideMenuState extends State<SliderSideMenu>
               widget._direction == Direction.RTL
                   ? Icons.arrow_back_ios
                   : Icons.arrow_forward_ios,
-              color: Colors.orange[900],
+              color:  Theme.of(context).primaryColor,
             ),
           ),
           onPressed: animate,
