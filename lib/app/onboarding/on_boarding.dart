@@ -10,7 +10,7 @@ class OnBoarding extends StatelessWidget {
     PageViewModel(
         pageColor: const Color(0xFF03A9F4),
         // iconImageAssetPath: 'assets/air-hostess.png',
-        bubble: Image.asset('assets/air-hostess.png'),
+        //  bubble: Image.asset('assets/air-hostess.png'),
         body: Text(
           'Haselfree  booking  of  flight  tickets  with  full  refund  on  cancelation',
         ),
@@ -20,20 +20,20 @@ class OnBoarding extends StatelessWidget {
         titleTextStyle: TextStyle(fontFamily: 'MyFont', color: Colors.white),
         bodyTextStyle: TextStyle(fontFamily: 'MyFont', color: Colors.white),
         mainImage: Image.asset(
-          'assets/airplane.png',
+          'assets/images/cat-male.png',
           height: 285.0,
           width: 285.0,
           alignment: Alignment.center,
         )),
     PageViewModel(
       pageColor: const Color(0xFF8BC34A),
-      iconImageAssetPath: 'assets/waiter.png',
+      // iconImageAssetPath: 'assets/waiter.png',
       body: Text(
         'We  work  for  the  comfort ,  enjoy  your  stay  at  our  beautiful  hotels',
       ),
       title: Text('Hotels'),
       mainImage: Image.asset(
-        'assets/hotel.png',
+        'assets/images/cat-male.png',
         height: 285.0,
         width: 285.0,
         alignment: Alignment.center,
@@ -43,13 +43,13 @@ class OnBoarding extends StatelessWidget {
     ),
     PageViewModel(
       pageColor: const Color(0xFF607D8B),
-      iconImageAssetPath: 'assets/taxi-driver.png',
+      iconImageAssetPath: 'assets/images/cat-male.png',
       body: Text(
         'Easy  cab  booking  at  your  doorstep  with  cashless  payment  system',
       ),
       title: Text('Cabs'),
       mainImage: Image.asset(
-        'assets/taxi.png',
+        'assets/images/cat-male.png',
         height: 285.0,
         width: 285.0,
         alignment: Alignment.center,
@@ -65,13 +65,7 @@ class OnBoarding extends StatelessWidget {
       pages,
       showNextButton: true,
       showBackButton: true,
-      onTapDoneButton: () {
-        Navigator.of(context).push(
-          FadePageRoute(
-            screen: HomePage(),
-          ),
-        );
-      },
+      onTapDoneButton: () {},
       pageButtonTextStyles: TextStyle(
         color: Colors.white,
         fontSize: 18.0,

@@ -74,9 +74,9 @@ flutter:
    - assets/images/facebook-logo.png
    - assets/images/cat-male.png
    - assets/images/cat-female.png
-   - assets/lottie/switch-dark-mode.json
-   - assets/lottie/switch-gender.json
-   - assets/lottie/button_dark_mode.json
+   - assets/lottie/bad-cat.json
+   - assets/lottie/angry-cat.json
+   - assets/lottie/loading-cat.json
 
   fonts:
     - family: Apercu

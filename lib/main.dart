@@ -7,8 +7,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mifadeschats/data/themes/app_themes.dart';
 import 'package:mifadeschats/data/themes/theme_changer.dart';
 import 'package:provider/provider.dart';
-import 'package:mifadeschats/app/landing_page.dart';
 import 'package:mifadeschats/services/auth.dart';
+
+import 'app/splashscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +68,7 @@ class MyAppWithTheme extends StatelessWidget {
         theme: theme.getTheme(),
         home: Container(
           color: Colors.orange[200],
-          child: LandingPage(app: app),
+          child: SplashScreen(app: app),
         ),
       ),
     );

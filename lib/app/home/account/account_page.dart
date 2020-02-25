@@ -4,6 +4,7 @@ import 'package:mifadeschats/components/card/card_dark_mode_switch.dart';
 import 'package:mifadeschats/components/card/card_notification.dart';
 import 'package:mifadeschats/components/platform_alert_dialog.dart';
 import 'package:mifadeschats/data/themes/theme_changer.dart';
+import 'package:mifadeschats/models/user.dart';
 import 'package:mifadeschats/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -60,9 +61,9 @@ class AccountPage extends StatelessWidget {
             )
           ],
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(130),
-            child: _builderUserInfo(user),
-          ),
+              preferredSize: Size.fromHeight(130),
+              child: Container() // _builderUserInfo(user),
+              ),
         ),
         body: Column(
           children: <Widget>[
@@ -99,7 +100,7 @@ class AccountPage extends StatelessWidget {
       ), */
         );
   }
-
+/*
   Widget _builderUserInfo(User user) {
     return Column(children: [
       Avatar(
@@ -107,9 +108,10 @@ class AccountPage extends StatelessWidget {
         radius: 50,
       ),
       SizedBox(height: 8),
-      if (user.displayName != null)
+      if (user.name != null)
         Text(user.displayName, style: TextStyle(color: Colors.white)),
       SizedBox(height: 8),
     ]);
   }
+  */
 }
