@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mifadeschats/components/input_dropdown.dart';
+import 'package:mifadeschats/utils/format.dart';
 
-import 'format.dart';
 
 class DateTimePicker extends StatelessWidget {
   const DateTimePicker({

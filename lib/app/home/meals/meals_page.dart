@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mifadeschats/components/button/awesome_button.dart';
-import 'package:mifadeschats/components/format.dart';
 import 'package:mifadeschats/components/list/list_items_builder.dart';
 import 'package:mifadeschats/components/reponsive_safe_area.dart';
 import 'package:mifadeschats/models/meal.dart';
+import 'package:mifadeschats/utils/format.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/services/database.dart';
 
@@ -13,6 +13,8 @@ import 'meal_item.dart';
 class MealsPage extends StatelessWidget {
   Widget _buildQuickMealButton(Database database, Size size) {
     return Positioned(
+      bottom: size.height / 7,
+      left: size.width / 1.5,
       child: AwesomeButton(
         blurRadius: 10.0,
         splashColor: Colors.orange[400],
@@ -21,7 +23,7 @@ class MealsPage extends StatelessWidget {
         width: 100,
         onTap: () async {
           await database.setMeal(Meal(
-            id: documentIdFromCurrentDate(),
+            id: documentUniqueId(),
             date: DateTime.now(),
             comment: '',
           ));
@@ -35,8 +37,6 @@ class MealsPage extends StatelessWidget {
           ),
         ),
       ),
-      bottom: size.height / 9,
-      left: size.width / 1.5,
     );
   }
 
@@ -104,8 +104,6 @@ class MealsPage extends StatelessWidget {
         return ListItemBuilder<Meal>(
           snapshot: snapshot,
           itemBuilder: (context, model) {
-            // return MealsListTile(model: model);
-
             return MealItem(
               meal: model,
               onDelete: () async {

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/components/format.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mifadeschats/models/meal.dart';
+import 'package:mifadeschats/utils/format.dart';
 
 class MealItem extends StatelessWidget {
   const MealItem({@required this.meal, this.onDelete});

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mifadeschats/components/avatar.dart';
 import 'package:mifadeschats/components/card/card_dark_mode_switch.dart';
+import 'package:mifadeschats/components/card/card_notification.dart';
 import 'package:mifadeschats/components/platform_alert_dialog.dart';
 import 'package:mifadeschats/data/themes/theme_changer.dart';
 import 'package:mifadeschats/services/auth.dart';
@@ -9,7 +10,7 @@ import 'package:provider/provider.dart';
 class AccountPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     try {
-      final auth = Provider.of<AuthBase>(context);
+      final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signOut();
     } catch (e) {
       print(e.toString());
@@ -68,6 +69,10 @@ class AccountPage extends StatelessWidget {
             CardDarkModeSwitch(
               value: _themeChanger.isDark(),
               onTap: (value) => _themeChanger.switchToDark(value),
+            ),
+            CardNotification(
+              value: true,
+              onTap: (value) => value,
             )
           ],
         )

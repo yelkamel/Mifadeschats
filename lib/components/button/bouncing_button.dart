@@ -32,8 +32,8 @@ class _BouncingButtonState extends State<BouncingButton>
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _controller.dispose();
   }
 
   void _onTapDown(TapDownDetails details) {

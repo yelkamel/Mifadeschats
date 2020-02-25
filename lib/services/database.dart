@@ -18,7 +18,7 @@ abstract class Database {
   Stream<List<Meal>> mealsStream({Pet pet});
 }
 
-String documentIdFromCurrentDate() {
+String documentUniqueId() {
   String id = Uuid().v1();
   return id;
 }

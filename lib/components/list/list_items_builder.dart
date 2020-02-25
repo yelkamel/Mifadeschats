@@ -48,7 +48,10 @@ class ListItemBuilder<T> extends StatelessWidget {
           return Container();
         }
         if (index == items.length + 1) {
-          return lastItem;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 200.0),
+            child: lastItem,
+          );
         }
         return itemBuilder(context, items[index - 1]);
       },

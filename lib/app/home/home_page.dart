@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   @required
   void initState() {
     super.initState();
-    _currentIndex = 2;
+    _currentIndex = 0;
   }
 
   Widget _buildPage(BuildContext context) {

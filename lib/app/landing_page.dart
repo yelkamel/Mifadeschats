@@ -7,6 +7,7 @@ import 'package:mifadeschats/app/sign_in/sign_in_page.dart';
 import 'package:mifadeschats/services/auth.dart';
 
 import 'home/home_page.dart';
+import 'onboarding/on_boarding.dart';
 
 class LandingPage extends StatelessWidget {
   final FirebaseApp app;
@@ -26,12 +27,16 @@ class LandingPage extends StatelessWidget {
             }
             return Provider<User>.value(
               value: user,
-              child: Provider<Database>(
-                create: (_) => FirestoreDatabase(uid: user.uid),
-                child: Provider<Storage>(
-                  create: (_) => FirestoreStorage(app: app),
-                  child: HomePage(),
-                ),
+              child: MultiProvider(
+                providers: [
+                  Provider<Database>(
+                    create: (_) => FirestoreDatabase(uid: user.uid),
+                  ),
+                  Provider<Storage>(
+                    create: (_) => FirestoreStorage(app: app),
+                  ),
+                ],
+                child: OnBoarding(),
               ),
             );
           } else {

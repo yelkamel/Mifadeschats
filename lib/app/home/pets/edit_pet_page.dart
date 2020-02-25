@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
-import 'package:mifadeschats/components/button/back_cross.dart';
+import 'package:mifadeschats/components/button/touchable_particule.dart';
 import 'package:mifadeschats/components/photo/image_capture.dart';
 import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/components/platform_alert_dialog.dart';
 import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/navigation/fade_page_route.dart';
 import 'package:mifadeschats/services/database.dart';
-import 'package:page_transition/page_transition.dart';
 
 class EditPetPage extends StatefulWidget {
   const EditPetPage({Key key, @required this.database, this.pet})
@@ -17,17 +17,12 @@ class EditPetPage extends StatefulWidget {
 
   static Future<void> show(BuildContext context,
       {Database database, Pet pet}) async {
-    await Navigator.of(context, rootNavigator: true).push(
-      PageTransition(
-        type: PageTransitionType.downToUp,
-        alignment: Alignment(0.0, 1.0),
-        duration: Duration(milliseconds: 500),
-        child: EditPetPage(
-          database: database,
-          pet: pet,
-        ),
+    await Navigator.of(context, rootNavigator: true).push(FadePageRoute(
+      screen: EditPetPage(
+        database: database,
+        pet: pet,
       ),
-    );
+    ));
   }
 
   @override
@@ -54,7 +49,9 @@ class _EditPetPageState extends State<EditPetPage> {
       _name = widget.pet.name;
       _age = widget.pet.age;
       _gender = widget.pet.gender;
-      _id = widget.pet?.id ?? documentIdFromCurrentDate();
+      _id = widget.pet?.id ?? documentUniqueId();
+    } else {
+      _id = documentUniqueId();
     }
   }
 
@@ -121,27 +118,10 @@ class _EditPetPageState extends State<EditPetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          Positioned(
-              top: 80,
-              right: 40,
-              child: BackCross(onTap: () {
-                Navigator.of(context).pop();
-              })),
-          _buildContents(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContents(BuildContext context) {
-    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: InkWell(
+        leading: TouchableParticule(
           child: Transform.rotate(
             angle: -pi / 2,
             child: Icon(
@@ -152,6 +132,12 @@ class _EditPetPageState extends State<EditPetPage> {
           onTap: () => Navigator.of(context).pop(),
         ),
       ),
+      body: _buildContents(context),
+    );
+  }
+
+  Widget _buildContents(BuildContext context) {
+    return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SingleChildScrollView(
         child: Padding(
@@ -232,7 +218,7 @@ class _EditPetPageState extends State<EditPetPage> {
         keyboardType:
             TextInputType.numberWithOptions(signed: false, decimal: false),
         onSaved: (value) => _age = int.tryParse(value) ?? 0,
-        onEditingComplete: () => _editingComplete('age'),
+        // onEditingComplete: () => _editingComplete('age'),
       ),
       FormField(
         onSaved: (value) {

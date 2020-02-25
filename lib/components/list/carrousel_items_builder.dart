@@ -49,12 +49,12 @@ class _CarouselItemBuilderState<T> extends State<CarouselItemBuilder<T>> {
       if (items.isNotEmpty) {
         return _buildList(items);
       } else {
-        return EmptyContent();
+        return widget.lastItem;
       }
     } else if (widget.snapshot.hasError) {
       return EmptyContent(
-        title: 'Connexion internet interrompu',
-        message: "Pas possible d'avoir la liste des animaux",
+        title: 'Probleme de Connexion internet',
+        message: "Pas possible d'avoir la liste",
       );
     }
 

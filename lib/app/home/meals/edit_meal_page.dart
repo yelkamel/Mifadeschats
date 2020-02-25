@@ -40,7 +40,7 @@ class _EditMealPageState extends State<EditMealPage> {
   }
 
   Meal _mealFromState() {
-    final id = widget.meal?.id ?? documentIdFromCurrentDate();
+    final id = widget.meal?.id ?? documentUniqueId();
     return Meal(
       id: id,
       date: _date,

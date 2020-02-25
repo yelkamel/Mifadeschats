@@ -63,7 +63,6 @@ class _PetsPageState extends State<PetsPage> {
           return CarouselItemBuilder(
             snapshot: snapshot,
             itemBuilder: (context, item, active) {
-              print("item: ${item}");
               return PetCardItem(
                 storage: storage,
                 pet: item,

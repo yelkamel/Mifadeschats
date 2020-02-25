@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mifadeschats/data/themes/app_themes.dart';
 import 'package:mifadeschats/data/themes/theme_changer.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,18 @@ import 'package:mifadeschats/services/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  initializeDateFormatting();
+
+  // Blocker l'orientation vertical
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  // Navigation color change
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.deepOrange,
+    systemNavigationBarIconBrightness: Brightness.light,
+  ));
 
   final FirebaseApp app = await FirebaseApp.configure(
     name: 'mifadeschats',
@@ -27,7 +41,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final FirebaseApp app;
-
   const MyApp({Key key, this.app}) : super(key: key);
 
   @override
@@ -52,7 +65,10 @@ class MyAppWithTheme extends StatelessWidget {
       child: MaterialApp(
         title: 'Mifa Des Chats',
         theme: theme.getTheme(),
-        home: LandingPage(app: app),
+        home: Container(
+          color: Colors.orange[200],
+          child: LandingPage(app: app),
+        ),
       ),
     );
   }

@@ -18,16 +18,26 @@ class _UploaderState extends State<Uploader> {
 
   StorageUploadTask _uploadTask;
 
+    @required
+  void initState() {
+    super.initState();
+    setState(() {
+      _uploadTask = _storage.ref().child(widget.path).putFile(widget.file);
+    });
+      }
+
   /// Starts an upload task
+  /*
   void _startUpload() {
     setState(() {
       _uploadTask = _storage.ref().child(widget.path).putFile(widget.file);
     });
   }
+  */
 
   @override
   Widget build(BuildContext context) {
-    if (_uploadTask != null) {
+ //   if (_uploadTask != null) {
       /// Manage the task state and event subscription with a StreamBuilder
       return StreamBuilder<StorageTaskEvent>(
           stream: _uploadTask.events,
@@ -40,7 +50,7 @@ class _UploaderState extends State<Uploader> {
 
             return Column(
               children: [
-                if (_uploadTask.isComplete) Text('🎉🎉🎉'),
+                // if (_uploadTask.isComplete) Text('🎉🎉🎉'),
 
                 if (_uploadTask.isPaused)
                   FlatButton(
@@ -56,17 +66,17 @@ class _UploaderState extends State<Uploader> {
 
                 // Progress bar
                 LinearProgressIndicator(value: progressPercent),
-                Text('${(progressPercent * 100).toStringAsFixed(2)} % '),
+                // Text('${(progressPercent * 100).toStringAsFixed(2)} % '),
               ],
             );
           });
-    } else {
+   /* } else {
       // Allows user to decide when to start the upload
       return FlatButton.icon(
         label: Text('Upload to Firebase'),
         icon: Icon(Icons.cloud_upload),
         onPressed: _startUpload,
       );
-    }
+    } */
   }
 }
