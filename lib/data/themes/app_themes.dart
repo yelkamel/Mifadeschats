@@ -67,5 +67,6 @@ final appThemeData = {
       color: Colors.white70,
       size: 25,
     ),
+    fontFamily: 'Apercu',
   ),
 };

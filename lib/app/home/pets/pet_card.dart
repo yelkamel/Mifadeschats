@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mifadeschats/components/button/touchable_particule.dart';
 import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/services/storage.dart';
+import 'package:provider/provider.dart';
 
 import 'pet_list_item.dart';
 
@@ -12,12 +13,10 @@ class PetCardItem extends StatefulWidget {
     @required this.pet,
     this.onTap,
     this.active = false,
-    this.storage,
   }) : super(key: key);
   final Pet pet;
   final VoidCallback onTap;
   final bool active;
-  final Storage storage;
 
   static Widget emptyContent(BuildContext context, Function onTap) {
     return GestureDetector(
@@ -60,7 +59,9 @@ class _PetCardItemState extends State<PetCardItem> {
 
   @override
   void initState() {
-    widget.storage.loadImage('/images/pets/${widget.pet.id}.png').then((res) {
+    final storage = Provider.of<Storage>(context);
+
+    storage.loadImage('/images/pets/${widget.pet.id}.png').then((res) {
       setState(() {
         _loading = false;
         _photoUrl = res;

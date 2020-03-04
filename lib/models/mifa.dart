@@ -1,30 +1,29 @@
-class User {
+class Mifa {
+  final String id;
   final String name;
-  final String mifaId;
 
-  User({
+  Mifa({
     this.name,
-    this.mifaId = '',
+    this.id = '',
   });
 
-  factory User.fromMap(Map<String, dynamic> data, String uid) {
+  factory Mifa.fromMap(Map<String, dynamic> data, String mifaId) {
     if (data == null) {
       return null;
     }
 
     final String name = data['name'];
-    final String mifaId = data['mifaId'];
 
-    return User(
+    return Mifa(
       name: name,
-      mifaId: mifaId,
+      id: mifaId,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'mifaId': mifaId,
+      'id': id,
     };
   }
 }

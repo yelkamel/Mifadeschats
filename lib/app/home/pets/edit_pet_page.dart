@@ -3,24 +3,31 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:mifadeschats/components/button/touchable_particule.dart';
 import 'package:mifadeschats/components/photo/image_capture.dart';
+import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/components/platform_alert_dialog.dart';
 import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/navigation/fade_page_route.dart';
 import 'package:mifadeschats/services/database.dart';
+import 'package:provider/provider.dart';
 
 class EditPetPage extends StatefulWidget {
-  const EditPetPage({Key key, @required this.database, this.pet})
+  const EditPetPage({Key key, @required this.database, this.pet, this.mifa})
       : super(key: key);
   final Database database;
+  final Mifa mifa;
   final Pet pet;
 
   static Future<void> show(BuildContext context,
       {Database database, Pet pet}) async {
+    final database = Provider.of<Database>(context, listen: false);
+    final mifa = Provider.of<Mifa>(context, listen: false);
+
     await Navigator.of(context, rootNavigator: true).push(FadePageRoute(
       screen: EditPetPage(
         database: database,
         pet: pet,
+        mifa: mifa,
       ),
     ));
   }
@@ -57,7 +64,7 @@ class _EditPetPageState extends State<EditPetPage> {
 
   Future<void> _delete() async {
     try {
-      await widget.database.deletePet(widget.pet);
+      await widget.database.deletePet(widget.mifa.id, widget.pet);
       Navigator.of(context).pop();
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
@@ -85,7 +92,7 @@ class _EditPetPageState extends State<EditPetPage> {
 
     if (_validateAndSave()) {
       try {
-        final pets = await widget.database.petsStream().first;
+        final pets = await widget.database.petsStream(widget.mifa.id).first;
         final allNames = pets.map((pet) => pet.name).toList();
         if (widget.pet != null) {
           allNames.remove(widget.pet.name);
@@ -99,7 +106,7 @@ class _EditPetPageState extends State<EditPetPage> {
           ).show(context);
         } else {
           final pet = Pet(id: _id, name: _name, age: _age, gender: _gender);
-          await widget.database.setPet(pet);
+          await widget.database.setPet(widget.mifa.id, pet);
 
           Navigator.of(context).pop();
         }

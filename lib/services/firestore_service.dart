@@ -20,6 +20,22 @@ class FirestoreService {
     await reference.delete();
   }
 
+  Future<List<T>> getCollection<T>({
+    @required String path,
+    @required T builder(Map<String, dynamic> data, String documentID),
+    Query queryBuilder(Query query),
+    int sort(T lhs, T rhs),
+  }) async {
+    QuerySnapshot query =
+        await Firestore.instance.collection(path).getDocuments();
+
+    List<T> listItems = query.documents
+        .map((snapshot) => builder(snapshot.data, snapshot.documentID))
+        .toList();
+
+    return listItems;
+  }
+
   Stream<List<T>> collectionStream<T>({
     @required String path,
     @required T builder(Map<String, dynamic> data, String documentID),

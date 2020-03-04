@@ -8,8 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:mifadeschats/app/sign_in/sign_in_page.dart';
 import 'package:mifadeschats/services/auth.dart';
 
-import 'onboarding/on_boarding.dart';
-
 class SplashScreen extends StatelessWidget {
   final FirebaseApp app;
 
@@ -18,6 +16,8 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
+    print('SplashScreen');
+
     return StreamBuilder<UserAuth>(
       stream: auth.onAuthStateChanged,
       builder: (context, snapshot) {
@@ -28,8 +28,9 @@ class SplashScreen extends StatelessWidget {
           }
 
           final Database database = FirestoreDatabase(uid: userAuth.uid);
-          return Provider<UserAuth>.value(
-            value: userAuth,
+
+          return Provider<UserAuth>(
+            create: (_) => userAuth,
             child: MultiProvider(
               providers: [
                 Provider<Database>(
@@ -38,9 +39,9 @@ class SplashScreen extends StatelessWidget {
                 Provider<Storage>(
                   create: (_) => FirestoreStorage(app: app),
                 ),
-                StreamProvider<User>.value(
-                  value: database.userStream(),
-                )
+                StreamProvider<User>(
+                  create: (_) => database.userStream(),
+                ),
               ],
               child: LandingPage(),
             ),

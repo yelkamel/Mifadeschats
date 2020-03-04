@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mifadeschats/components/list/carrousel_items_builder.dart';
+import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/app/home/pets/edit_pet_page.dart';
 import 'package:mifadeschats/app/home/pets/pet_card.dart';
@@ -36,7 +37,9 @@ class _PetsPageState extends State<PetsPage> {
   Future<void> _delete(BuildContext context, Pet pet) async {
     try {
       final database = Provider.of<Database>(context);
-      await database.deletePet(pet);
+      final mifa = Provider.of<Mifa>(context);
+
+      await database.deletePet(mifa.id, pet);
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(
         title: 'une Erreur est survenu',
@@ -55,28 +58,28 @@ class _PetsPageState extends State<PetsPage> {
 
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context);
+    final mifa = Provider.of<Mifa>(context);
     final storage = Provider.of<Storage>(context);
 
     return StreamBuilder<List<Pet>>(
-        stream: database.petsStream(),
+        stream: database.petsStream(mifa.id),
         builder: (context, snapshot) {
           return CarouselItemBuilder(
             snapshot: snapshot,
             itemBuilder: (context, item, active) {
               return PetCardItem(
-                storage: storage,
                 pet: item,
                 active: active,
                 onTap: () {
                   /// PetMealsPage.show(context, pet),
-                  EditPetPage.show(context, database: database, pet: item);
+                  EditPetPage.show(context, pet: item);
                 },
               );
             },
             firstItem: _buildTagPage(context),
             lastItem: PetCardItem.emptyContent(
               context,
-              () => EditPetPage.show(context, database: database, pet: null),
+              () => EditPetPage.show(context, pet: null),
             ),
           );
         });

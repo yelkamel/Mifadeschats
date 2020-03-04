@@ -3,19 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mifadeschats/components/date_time_picker.dart';
 import 'package:mifadeschats/models/meal.dart';
-import 'package:mifadeschats/models/pet.dart';
+import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
+import 'package:provider/provider.dart';
 
 class EditMealPage extends StatefulWidget {
-  const EditMealPage({@required this.database, this.meal});
+  const EditMealPage({@required this.database, this.mifa, this.meal});
   final Database database;
+  final Mifa mifa;
   final Meal meal;
-  static Future<void> show(
-      {BuildContext context, Database database, Meal meal}) async {
+  static Future<void> show({BuildContext context, Meal meal}) async {
+    final database = Provider.of<Database>(context, listen: false);
+    final mifa = Provider.of<Mifa>(context, listen: false);
+
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (context) => EditMealPage(database: database, meal: meal),
+        builder: (context) =>
+            EditMealPage(database: database, mifa: mifa, meal: meal),
         fullscreenDialog: true,
       ),
     );
@@ -51,7 +56,7 @@ class _EditMealPageState extends State<EditMealPage> {
   Future<void> _setEntryAndDismiss(BuildContext context) async {
     try {
       final meal = _mealFromState();
-      await widget.database.setMeal(meal);
+      await widget.database.setMeal(widget.mifa.id, meal);
       Navigator.of(context).pop();
     } on PlatformException catch (e) {
       PlatformExceptionAlertDialog(

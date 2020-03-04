@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mifadeschats/components/button/touchable_particule.dart';
 
 class AwesomeButton extends StatelessWidget {
   AwesomeButton(
@@ -9,7 +10,7 @@ class AwesomeButton extends StatelessWidget {
       this.onTap,
       this.borderRadius,
       this.splashColor,
-      this.blurRadius});
+      this.blurRadius = 10.0});
   @required
   final double height;
   @required
@@ -29,36 +30,25 @@ class AwesomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      child: Center(
+    return TouchableParticule(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(15),
         child: Material(
           type: MaterialType.transparency,
-          child: InkWell(
-            borderRadius: borderRadius,
-            splashColor: splashColor,
-            onTap: onTap,
-            child: Container(
-              height: height,
-              width: width,
-              child: Center(
-                child: child,
-              ),
-            ),
-          ),
+          child: child,
         ),
-      ),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: borderRadius,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: color,
-            blurRadius: blurRadius,
-            offset: Offset(0.0, 0.0),
-          ),
-        ],
+        decoration: BoxDecoration(
+          color: onTap == null ? Colors.grey : color,
+          borderRadius: borderRadius,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: onTap == null ? Colors.grey : color,
+              blurRadius: blurRadius,
+              offset: Offset(0.0, 0.0),
+            ),
+          ],
+        ),
       ),
     );
   }
