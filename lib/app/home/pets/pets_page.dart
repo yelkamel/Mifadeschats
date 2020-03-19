@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:mifadeschats/components/list/carrousel_items_builder.dart';
 import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/pet.dart';
+
 import 'package:mifadeschats/app/home/pets/edit_pet_page.dart';
 import 'package:mifadeschats/app/home/pets/pet_card.dart';
 import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
-import 'package:mifadeschats/services/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
@@ -59,10 +59,9 @@ class _PetsPageState extends State<PetsPage> {
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context);
     final mifa = Provider.of<Mifa>(context);
-    final storage = Provider.of<Storage>(context);
 
-    return StreamBuilder<List<Pet>>(
-        stream: database.petsStream(mifa.id),
+    return FutureBuilder<List<Pet>>(
+        future: database.getPetFromMifa(mifa.id),
         builder: (context, snapshot) {
           return CarouselItemBuilder(
             snapshot: snapshot,
@@ -71,7 +70,6 @@ class _PetsPageState extends State<PetsPage> {
                 pet: item,
                 active: active,
                 onTap: () {
-                  /// PetMealsPage.show(context, pet),
                   EditPetPage.show(context, pet: item);
                 },
               );

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class Meal {
@@ -12,17 +13,16 @@ class Meal {
   String comment;
 
   factory Meal.fromMap(Map<dynamic, dynamic> value, String id) {
-    final int dateInTimeStamp = value['date'];
     return Meal(
       id: id,
-      date: DateTime.fromMillisecondsSinceEpoch(dateInTimeStamp),
+      date: value['date'].toDate(),
       comment: value['comment'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'date': date.millisecondsSinceEpoch,
+      'date': Timestamp.fromMicrosecondsSinceEpoch(date.microsecondsSinceEpoch),
       'comment': comment,
     };
   }

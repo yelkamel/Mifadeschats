@@ -15,12 +15,15 @@ abstract class Database {
   Stream<List<Pet>> petsStream(String mifaId);
   Stream<Pet> petStream(String mifaId, String petId);
   Future<List<Pet>> getPetFromMifa(String mifaId);
+  Future<List<Meal>> getMealFromMifa(String mifaId);
 
   Stream<Mifa> mifaStream(String mifaId);
   Stream<List<Mifa>> allMifaStream();
   Future<void> setMifa(Mifa mifa);
+
   Stream<List<Mifa>> mifaLikeStream(String mifaName);
   Future<List<Mifa>> getAllMifa();
+  Future<Mifa> getMifa(String mifaId);
 
   Stream<User> userStream();
   Future<void> setUser(User user);
@@ -70,11 +73,21 @@ class FirestoreDatabase implements Database {
         builder: (data, documentId) => Pet.fromMap(data, documentId),
         path: APIPath.pets(mifaId),
       );
-
+  @override
+  Future<List<Meal>> getMealFromMifa(String mifaId) => _service.getCollection(
+        builder: (data, documentId) => Meal.fromMap(data, documentId),
+        path: APIPath.meals(mifaId),
+      );
   @override
   Future<List<Mifa>> getAllMifa() => _service.getCollection(
         builder: (data, documentId) => Mifa.fromMap(data, documentId),
         path: APIPath.mifas(),
+      );
+
+  @override
+  Future<Mifa> getMifa(String mifaId) => _service.getDocument(
+        builder: (data, documentId) => Mifa.fromMap(data, documentId),
+        path: APIPath.mifa(mifaId),
       );
 
   @override

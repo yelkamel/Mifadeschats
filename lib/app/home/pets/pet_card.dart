@@ -55,10 +55,14 @@ class PetCardItem extends StatefulWidget {
 
 class _PetCardItemState extends State<PetCardItem> {
   bool _loading = true;
-  String _photoUrl;
+  String _photoUrl =
+      "https://i.pinimg.com/originals/9d/6c/b4/9d6cb4c732adfa42ed4887e74f20fe3e.png";
 
   @override
-  void initState() {
+  void initState() {}
+
+  @override
+  void didChangeDependencies() async {
     final storage = Provider.of<Storage>(context);
 
     storage.loadImage('/images/pets/${widget.pet.id}.png').then((res) {
@@ -66,6 +70,8 @@ class _PetCardItemState extends State<PetCardItem> {
         _loading = false;
         _photoUrl = res;
       });
+    }).catchError((error) {
+      print('=>Error:Pas de photo de chat');
     });
   }
 
@@ -74,6 +80,7 @@ class _PetCardItemState extends State<PetCardItem> {
     final double blur = widget.active ? 30 : 0;
     final double offset = widget.active ? 20 : 0;
     final double top = widget.active ? 100 : 200;
+
     return TouchableParticule(
       onTap: widget.onTap,
       child: AnimatedContainer(
@@ -82,10 +89,7 @@ class _PetCardItemState extends State<PetCardItem> {
         margin: EdgeInsets.only(top: top, bottom: 200, right: 40),
         decoration: BoxDecoration(
             image: DecorationImage(
-              image: _photoUrl != null
-                  ? NetworkImage(_photoUrl)
-                  : NetworkImage(
-                      "https://i.pinimg.com/originals/9d/6c/b4/9d6cb4c732adfa42ed4887e74f20fe3e.png"),
+              image: NetworkImage(_photoUrl),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(20),

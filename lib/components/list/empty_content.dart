@@ -12,18 +12,28 @@ class EmptyContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          title,
-          style: TextStyle(fontSize: 32, color: Colors.black54),
-        ),
-        Text(
-          message,
-          style: TextStyle(fontSize: 18, color: Colors.black54),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+                fontSize: 32,
+                fontFamily: 'Apercu',
+                color: Theme.of(context).primaryColor),
+          ),
+          SizedBox(height: 15),
+          Text(
+            message,
+            style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Apercu',
+                color: Theme.of(context).primaryColor),
+          ),
+        ],
+      ),
     );
   }
 }

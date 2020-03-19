@@ -3,17 +3,19 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:mifadeschats/data/notification/local_notification.dart';
 import 'package:mifadeschats/data/themes/app_themes.dart';
 import 'package:mifadeschats/data/themes/theme_changer.dart';
+import 'package:mifadeschats/splashscreen.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/services/auth.dart';
-
-import 'app/splashscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Date formating init
   initializeDateFormatting();
 
   // Blocker l'orientation vertical
@@ -26,6 +28,7 @@ void main() async {
     systemNavigationBarIconBrightness: Brightness.light,
   ));
 
+  // Firebase Init
   final FirebaseApp app = await FirebaseApp.configure(
     name: 'mifadeschats',
     options: FirebaseOptions(
@@ -36,27 +39,53 @@ void main() async {
       projectID: 'mifadeschats',
     ),
   );
+  // END
 
-  runApp(MyApp(app: app));
+  //  Local Notification Init
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  var initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettingsIOS = IOSInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false);
+  var initializationSettings = InitializationSettings(
+      initializationSettingsAndroid, initializationSettingsIOS);
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: null);
+  // END
+
+  runApp(MyApp(
+    app: app,
+    localNotificationPlugin: flutterLocalNotificationsPlugin,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final FirebaseApp app;
-  const MyApp({Key key, this.app}) : super(key: key);
+  final FlutterLocalNotificationsPlugin localNotificationPlugin;
+
+  const MyApp({Key key, this.app, this.localNotificationPlugin})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ThemeChanger>(
-      create: (_) => ThemeChanger(appThemeData[AppTheme.OrangeLight]),
-      child: MyAppWithTheme(app: app),
+    return ChangeNotifierProvider<NotificationChanger>(
+      create: (_) => NotificationChanger(service: localNotificationPlugin),
+      child: ChangeNotifierProvider<ThemeChanger>(
+        create: (_) => ThemeChanger(appThemeData[AppTheme.OrangeLight]),
+        child: MyAppWithAppProvider(app: app),
+      ),
     );
   }
 }
 
-class MyAppWithTheme extends StatelessWidget {
+class MyAppWithAppProvider extends StatelessWidget {
   final FirebaseApp app;
 
-  const MyAppWithTheme({Key key, this.app}) : super(key: key);
+  const MyAppWithAppProvider({Key key, this.app}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +93,7 @@ class MyAppWithTheme extends StatelessWidget {
     return Provider<AuthBase>(
       create: (context) => Auth(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Mifa Des Chats',
         theme: theme.getTheme(),
         home: Container(

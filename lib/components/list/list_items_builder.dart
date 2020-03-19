@@ -5,13 +5,15 @@ import 'empty_content.dart';
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 
 class ListItemBuilder<T> extends StatelessWidget {
-  const ListItemBuilder({
+  ListItemBuilder({
     Key key,
     @required this.snapshot,
     @required this.itemBuilder,
     this.lastItem,
+    this.controller,
   }) : super(key: key);
 
+  final ScrollController controller;
   final AsyncSnapshot<List<T>> snapshot;
   final ItemWidgetBuilder<T> itemBuilder;
   final Widget lastItem;
@@ -39,6 +41,7 @@ class ListItemBuilder<T> extends StatelessWidget {
 
   Widget _buildList(List<T> items) {
     return ListView.separated(
+      controller: controller,
       itemCount: items.length + 2,
       separatorBuilder: (context, index) => Divider(
         height: 0.5,

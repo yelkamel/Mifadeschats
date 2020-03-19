@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/app/landing_page.dart';
+import 'package:mifadeschats/landing_page.dart';
 import 'package:mifadeschats/models/user.dart';
 import 'package:mifadeschats/services/database.dart';
 import 'package:mifadeschats/services/storage.dart';

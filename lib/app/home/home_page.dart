@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mifadeschats/app/home/meals/meals_page.dart';
 import 'package:mifadeschats/app/home/pets/pets_page.dart';
-import 'package:mifadeschats/components/menu/slider_side_menu.dart';
+
 
 import 'account/account_page.dart';
 
@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     _currentIndex = 0;
   }
 
-  Widget _buildPage(BuildContext context) {
+  Widget _buildPage() {
     switch (_currentIndex) {
       case 0:
         return PetsPage();
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          _buildPage(context),
+          _buildPage(),
           Align(
             alignment: Alignment.bottomCenter,
             child: CurvedNavigationBar(

@@ -20,6 +20,15 @@ class FirestoreService {
     await reference.delete();
   }
 
+  Future<T> getDocument<T>({
+    @required String path,
+    @required T builder(Map<String, dynamic> data, String documentID),
+  }) async {
+    var fireStoreItem = await Firestore.instance.document(path).get();
+
+    return builder(fireStoreItem.data, fireStoreItem.documentID);
+  }
+
   Future<List<T>> getCollection<T>({
     @required String path,
     @required T builder(Map<String, dynamic> data, String documentID),

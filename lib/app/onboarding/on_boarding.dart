@@ -7,6 +7,7 @@ import 'package:mifadeschats/app/home/pets/edit_pet_page.dart';
 import 'package:mifadeschats/components/animation/fade_in.dart';
 import 'package:mifadeschats/components/button/awesome_button.dart';
 import 'package:mifadeschats/components/reponsive_safe_area.dart';
+import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/user.dart';
 import 'package:mifadeschats/services/database.dart';
 
@@ -54,21 +55,6 @@ class _OnBoardingState extends State<OnBoarding>
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _ctrl.addListener(() {
-      /*
-      int next = _ctrl.page.round();
-      if (_step != next) {
-        setState(() {
-          _step = next;
-        });
-      }
-      */
-    });
-  }
-
   void onChanged(String value) {
     setState(() {
       switch (_step) {
@@ -91,10 +77,6 @@ class _OnBoardingState extends State<OnBoarding>
     controls.play("Animations");
     setState(() {
       _step = _step - 1;
-      // widget.database.setUser(User(
-      //  name: _name,
-      //  mifaId: _mifaName,
-      //));
     });
   }
 
@@ -105,13 +87,8 @@ class _OnBoardingState extends State<OnBoarding>
         duration: Duration(seconds: 1),
       );
       controls.play("Animations");
-      print("step$_step");
       setState(() {
         _step = _step + 1;
-        // widget.database.setUser(User(
-        //  name: _name,
-        //  mifaId: _mifaName,
-        //));
       });
     }
   }
@@ -129,7 +106,7 @@ class _OnBoardingState extends State<OnBoarding>
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontFamily: 'Apercu',
-                fontSize: 18,
+                fontSize: 24,
               ),
             ),
           ),
@@ -141,7 +118,7 @@ class _OnBoardingState extends State<OnBoarding>
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontFamily: 'Apercu',
-                fontSize: 18,
+                fontSize: 24,
               ),
             ),
           )
@@ -165,6 +142,19 @@ class _OnBoardingState extends State<OnBoarding>
             _mifaName = "";
           });
         },
+        onAddMifa: () {
+          String newMifaID = "$_name=${documentUniqueId()}";
+          widget.database.setMifa(Mifa(
+            nbOfMeal: 0,
+            lastMealDate: DateTime.now(),
+            name: _mifaName,
+            id: newMifaID,
+          ));
+          widget.database.setUser(User(
+            name: _name,
+            mifaId: newMifaID,
+          ));
+        },
         onSelectMifa: (mifaId) {
           widget.database.setUser(User(
             name: _name,
@@ -174,48 +164,30 @@ class _OnBoardingState extends State<OnBoarding>
       );
     }
 
-    if (position < 2) {
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            width: size.width * 0.7,
-            child: FadeTextField(
-              hintText: formText[position]["placeHolder"],
-              onChanged: onChanged,
-              onSubmitEditing: onSubmitEditing,
-              unFocusOnSubmit: position == 1,
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          width: size.width * 0.7,
+          child: FadeTextField(
+            hintText: formText[position]["placeHolder"],
+            onChanged: onChanged,
+            onSubmitEditing: onSubmitEditing,
+            unFocusOnSubmit: position == 1,
           ),
-          if (position > 0)
-            GestureDetector(
-              onTap: goBack,
-              child: Icon(
-                Icons.arrow_drop_up,
-                size: 50,
-                color: Theme.of(context).primaryColor,
-              ),
-            )
-        ],
-      );
-    }
-
-    return AwesomeButton(
-      blurRadius: 10.0,
-      splashColor: Colors.orange[400],
-      borderRadius: BorderRadius.circular(37.5),
-      onTap: () => EditPetPage.show(context, pet: null),
-      color: Colors.orange[600],
-      child: Text(
-        formText[position]["placeHolder"],
-        style: TextStyle(
-          color: Colors.white70,
-          fontSize: 22.0,
-          fontFamily: 'Apercu',
         ),
-      ),
+        if (position > 0)
+          GestureDetector(
+            onTap: goBack,
+            child: Icon(
+              Icons.arrow_drop_up,
+              size: 50,
+              color: Theme.of(context).primaryColor,
+            ),
+          )
+      ],
     );
   }
 
@@ -243,12 +215,11 @@ class _OnBoardingState extends State<OnBoarding>
                 controller: _ctrl,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, position) {
-                  print("PageView.builder");
                   return Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      if (_step < 2) _buildInsctructionText(position),
+                      if (_step < 2) _buildInsctructionText(_step),
                       _buildInputs(context, position, size)
                     ],
                   );

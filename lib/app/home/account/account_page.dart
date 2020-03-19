@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/components/avatar.dart';
 import 'package:mifadeschats/components/card/card_dark_mode_switch.dart';
 import 'package:mifadeschats/components/card/card_notification.dart';
 import 'package:mifadeschats/components/platform_alert_dialog.dart';
 import 'package:mifadeschats/data/themes/theme_changer.dart';
-import 'package:mifadeschats/models/user.dart';
 import 'package:mifadeschats/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +39,6 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -60,10 +57,10 @@ class AccountPage extends StatelessWidget {
               onTap: () => _confirmSignOut(context),
             )
           ],
-          bottom: PreferredSize(
+          /* bottom: PreferredSize(
               preferredSize: Size.fromHeight(130),
               child: Container() // _builderUserInfo(user),
-              ),
+              ), */
         ),
         body: Column(
           children: <Widget>[

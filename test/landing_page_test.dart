@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:mifadeschats/app/landing_page.dart';
 import 'package:mifadeschats/app/sign_in/sign_in_page.dart';
 import 'package:mifadeschats/services/auth.dart';
 

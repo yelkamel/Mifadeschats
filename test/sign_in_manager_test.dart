@@ -30,13 +30,6 @@ void main() {
     manager = SignInManager(auth: mockAuth, isLoading: isLoading);
   });
 
-  test('sign-in - success', () async {
-    when(mockAuth.signInAnonymously())
-        .thenAnswer((_) => Future.value(User(uid: '123')));
-    await manager.signInAnonymously();
-
-    expect(isLoading.values, [true]);
-  });
 
   test('sign-in - failure', () async {
     when(mockAuth.signInAnonymously())
