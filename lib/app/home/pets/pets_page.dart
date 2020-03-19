@@ -85,6 +85,8 @@ class _PetsPageState extends State<PetsPage> {
 }
 
 Widget _buildTagPage(BuildContext context) {
+  final mifa = Provider.of<Mifa>(context);
+
   return Container(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -116,7 +118,7 @@ Widget _buildTagPage(BuildContext context) {
           ],
         ),
         Text(
-          'de la mifa',
+          'de la mifa ${mifa.name}',
           style: TextStyle(
             color: Theme.of(context).primaryColor,
             fontFamily: 'Apercu',

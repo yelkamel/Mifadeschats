@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mifadeschats/components/avatar.dart';
 import 'package:mifadeschats/components/card/card_dark_mode_switch.dart';
 import 'package:mifadeschats/components/card/card_notification.dart';
 import 'package:mifadeschats/components/platform_alert_dialog.dart';
 import 'package:mifadeschats/data/themes/theme_changer.dart';
+import 'package:mifadeschats/models/user.dart';
 import 'package:mifadeschats/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -40,10 +42,19 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+    final userAuth = Provider.of<UserAuth>(context, listen: false);
+    final user = Provider.of<User>(context, listen: false);
+    TextStyle textStyle = TextStyle(
+      fontSize: 24,
+      fontFamily: 'Apercu',
+      fontWeight: FontWeight.w800,
+      color: Colors.white70,
+    );
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).secondaryHeaderColor,
+          title: Text(user.name, style: textStyle),
           actions: <Widget>[
             GestureDetector(
               child: Padding(
@@ -57,10 +68,12 @@ class AccountPage extends StatelessWidget {
               onTap: () => _confirmSignOut(context),
             )
           ],
-          /* bottom: PreferredSize(
-              preferredSize: Size.fromHeight(130),
-              child: Container() // _builderUserInfo(user),
-              ), */
+          bottom: userAuth.photoUrl != null
+              ? PreferredSize(
+                  preferredSize: Size.fromHeight(100),
+                  child: _builderUserInfo(userAuth, user),
+                )
+              : null,
         ),
         body: Column(
           children: <Widget>[
@@ -97,18 +110,15 @@ class AccountPage extends StatelessWidget {
       ), */
         );
   }
-/*
-  Widget _builderUserInfo(User user) {
+
+  Widget _builderUserInfo(UserAuth userAuth, User user) {
     return Column(children: [
-      Avatar(
-        photoUrl: user.photoUrl,
-        radius: 50,
-      ),
-      SizedBox(height: 8),
-      if (user.name != null)
-        Text(user.displayName, style: TextStyle(color: Colors.white)),
+      if (userAuth.photoUrl != null)
+        Avatar(
+          photoUrl: userAuth.photoUrl,
+          radius: 50,
+        ),
       SizedBox(height: 8),
     ]);
   }
-  */
 }

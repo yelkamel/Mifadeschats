@@ -48,6 +48,7 @@ class CardDarkModeSwitch extends StatelessWidget {
               ],
             ),
             Switch(
+              activeColor: Theme.of(context).accentColor,
               value: value,
               onChanged: onTap,
             )

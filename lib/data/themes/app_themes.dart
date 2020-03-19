@@ -46,9 +46,9 @@ final appThemeData = {
   AppTheme.OrangeDark: ThemeData(
     brightness: Brightness.dark,
     canvasColor: Colors.deepOrange,
-    primaryColor: Colors.orange,
-    primaryColorLight: Colors.orange[600],
-    primaryColorDark: Colors.orange[900],
+    primaryColor: Colors.orange[300],
+    primaryColorLight: Colors.orange[200],
+    primaryColorDark: Colors.orange[500],
     accentColor: Colors.deepOrange,
     backgroundColor: Colors.orange[900],
     cardColor: Colors.white70,

@@ -60,6 +60,7 @@ class _CardNotificationState extends State<CardNotification> {
             Switch(
               value: notificationService.allowNotification,
               onChanged: (value) {
+                print("switch $value");
                 notificationService.switchNotification(value);
                 if (value) {
                   notificationService.requestIOSPermissions();

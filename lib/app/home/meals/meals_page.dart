@@ -1,4 +1,5 @@
-import 'package:calendar_strip/calendar_strip.dart';
+import 'dart:async';
+
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:mifadeschats/app/home/meals/meal_calendar.dart';
@@ -9,7 +10,6 @@ import 'package:mifadeschats/components/reponsive_safe_area.dart';
 import 'package:mifadeschats/data/notification/local_notification.dart';
 import 'package:mifadeschats/models/meal.dart';
 import 'package:mifadeschats/models/mifa.dart';
-import 'package:mifadeschats/utils/format.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/services/database.dart';
 
@@ -24,6 +24,7 @@ class MealsPage extends StatefulWidget {
 class _MealsPageState extends State<MealsPage> {
   ScrollController _scrollController = new ScrollController();
   FlareControls _controls = FlareControls();
+  Timer _timer;
 
   Future _showNotification(BuildContext context) async {
     final notificationService =
@@ -34,10 +35,23 @@ class _MealsPageState extends State<MealsPage> {
     }
   }
 
+  void startAnimation() {
+    _controls.play("Animations");
+    new Timer(Duration(seconds: 1), () => _controls.play("Animations"));
+    const oneSec = const Duration(seconds: 15);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        _controls.play("Animations");
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    _controls.play("Animations");
+
+    startAnimation();
   }
 
   void _scrollToEnd() {
@@ -50,7 +64,7 @@ class _MealsPageState extends State<MealsPage> {
   Widget _buildQuickMealButton(
       BuildContext context, Database database, Mifa mifa, Size size) {
     return Positioned(
-      bottom: size.height / 7,
+      bottom: size.height / 6,
       left: size.width / 1.5,
       child: AwesomeButton(
         blurRadius: 10.0,
@@ -148,9 +162,6 @@ class _MealsPageState extends State<MealsPage> {
   }
 
   Widget _buildContents(BuildContext context, Database database, Mifa mifa) {
-    print("nbOfMeal ${mifa.nbOfMeal}");
-    print("mifa.id ${mifa.id}");
-
     return Column(
       children: <Widget>[
         Expanded(
@@ -196,5 +207,11 @@ class _MealsPageState extends State<MealsPage> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 }

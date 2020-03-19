@@ -59,6 +59,10 @@ class NotificationChanger with ChangeNotifier {
       print("=>sauvegarde SharePreference hasNotification:$succ");
     });
 
+    if (!value) {
+      await service.cancelAll();
+    }
+
     notifyListeners();
   }
 }

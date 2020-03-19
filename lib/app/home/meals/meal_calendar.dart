@@ -41,17 +41,6 @@ class _MealCalendarState extends State<MealCalendar> {
     return Container(
       height: 10,
     );
-    /*
-    return Container(
-      child: Text(monthName,
-          style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-              fontStyle: FontStyle.italic)),
-      padding: EdgeInsets.only(top: 8, bottom: 4),
-    );
-    */
   }
 
   Widget _getMarkedIndicatorWidget() {
@@ -70,7 +59,7 @@ class _MealCalendarState extends State<MealCalendar> {
       date, selectedDate, rowIndex, dayName, isDateMarked, isDateOutOfRange) {
     bool isSelectedDate = date.compareTo(selectedDate) == 0;
     double opacity = isDateOutOfRange ? 0.4 : 1;
-    Color fontColor = Theme.of(context).primaryColorLight;
+    Color fontColor = Theme.of(context).primaryColor;
     TextStyle normalStyle =
         TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: fontColor);
     TextStyle selectedStyle = TextStyle(
