@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_oauth/firebase_auth_oauth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -24,6 +25,7 @@ abstract class AuthBase {
       String email, String password);
   Future<UserAuth> signInWithGoogle();
   Future<UserAuth> signInWithFacebook();
+  Future<UserAuth> signInWithAppleStore();
   Future<void> signOut();
 }
 
@@ -94,6 +96,23 @@ class Auth implements AuthBase {
           message: 'Missing Google Auth Token',
         );
       }
+    } else {
+      throw PlatformException(
+        code: 'ERROR_ABORTED_BY_USER',
+        message: 'Sign in aborted by user',
+      );
+    }
+  }
+
+  @override
+  Future<UserAuth> signInWithAppleStore() async {
+    final firebaseAuth = FirebaseAuthOAuth();
+
+    final result = await firebaseAuth
+        .openSignInFlow("apple.com", ["email"], {"locale": "en"});
+
+    if (result != null) {
+      return _userFromFirebase(result);
     } else {
       throw PlatformException(
         code: 'ERROR_ABORTED_BY_USER',

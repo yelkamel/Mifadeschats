@@ -60,6 +60,16 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  Future<void> _signInWithAppleStore(BuildContext context) async {
+    try {
+      await manager.signInWithAppleStore();
+    } on PlatformException catch (e) {
+      if (e.code != 'ERROR_ABORTED_BY_USER') {
+        _showSignInError(context, e);
+      }
+    }
+  }
+
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
       await manager.signInWithFacebook();
@@ -91,7 +101,7 @@ class SignInPage extends StatelessWidget {
 
   Widget _buildContent(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(40.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -117,6 +127,14 @@ class SignInPage extends StatelessWidget {
             onPressed: isLoading ? null : () => _signInWithFacebook(context),
           ),
           SizedBox(height: 8.0),
+          SocialSignInButton(
+            assetName: 'assets/images/apple-logo.png',
+            text: 'Apple',
+            textColor: Colors.black87,
+            color: Colors.grey[300],
+            onPressed: isLoading ? null : () => _signInWithAppleStore(context),
+          ),
+          SizedBox(height: 8.0),
           SignInButton(
             text: 'Email',
             textColor: Theme.of(context).canvasColor,
@@ -139,7 +157,7 @@ class SignInPage extends StatelessWidget {
       'Connexion',
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 32.0,
+        fontSize: 34.0,
         fontWeight: FontWeight.w600,
         color: Theme.of(context).primaryColor,
         fontFamily: 'Apercu',

@@ -33,7 +33,7 @@ void main() async {
     name: 'mifadeschats',
     options: FirebaseOptions(
       googleAppID: Platform.isIOS
-          ? '1:736053778621:ios:42c6dcd81e9c79777effd4'
+          ? '1:736053778621:ios:0bee8f472c28d5e17effd4'
           : '1:736053778621:android:29cebaabbcf852777effd4',
       apiKey: 'AIzaSyAwMRk6Nj3oevO4HJ_nQ6LaBxZgoFh7svA',
       projectID: 'mifadeschats',
