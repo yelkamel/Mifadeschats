@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mifadeschats/app/home/pets/edit_pet_page.dart';
-import 'package:mifadeschats/app/onboarding/fade_text_input.dart';
-import 'package:mifadeschats/components/button/awesome_button.dart';
+import 'package:mifadeschats/widget/button/awesome_button.dart';
+import 'package:mifadeschats/widget/input/fade_text_input.dart';
 import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/pet.dart';
 import 'package:mifadeschats/services/database.dart';
@@ -108,37 +107,20 @@ class _MifaSelectorState extends State<MifaSelector> {
   }
 
   Widget _buildAddMifa(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 20),
-        Text(
-          _mifasDisplay.length != 0
-              ? "Si vous ne trouvez pas la votre 😁"
-              : "Aucune mifa associer à ce nom 😏",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontFamily: "Apercu",
-            fontSize: 16,
-          ),
+    return AwesomeButton(
+      blurRadius: 10.0,
+      splashColor: Colors.orange[400],
+      borderRadius: BorderRadius.circular(37.5),
+      onTap: widget.onAddMifa,
+      color: Colors.orange[600],
+      child: Text(
+        "Ajouter la mif ${widget.mifaName}",
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 16.0,
+          fontFamily: 'Apercu',
         ),
-        SizedBox(height: 20),
-        AwesomeButton(
-          blurRadius: 10.0,
-          splashColor: Colors.orange[400],
-          borderRadius: BorderRadius.circular(37.5),
-          onTap: widget.onAddMifa,
-          color: Colors.orange[600],
-          child: Text(
-            "Ajouter la mif ${widget.mifaName}",
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 16.0,
-              fontFamily: 'Apercu',
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -166,37 +148,16 @@ class _MifaSelectorState extends State<MifaSelector> {
   }
 
   Widget _buildContent(BuildContext context) {
-    return ListView.separated(
-      itemCount: _mifasDisplay.length + 1,
-      scrollDirection: Axis.vertical,
-      separatorBuilder: (context, index) => Divider(height: 0.5),
-      itemBuilder: (context, index) {
-        if (index == _mifasDisplay.length) {
-          return Column(
-            children: <Widget>[
-              _buildAddMifa(context),
-              SizedBox(height: 10),
-              AwesomeButton(
-                width: 60,
-                blurRadius: 10.0,
-                splashColor: Colors.orange[400],
-                borderRadius: BorderRadius.circular(20),
-                onTap: widget.goBack,
-                color: Colors.orange[600],
-                child: Text(
-                  "Retour",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14.0,
-                    fontFamily: 'Apercu',
-                  ),
-                ),
-              ),
-            ],
-          );
-        }
-        return _buildItem(context, _mifasDisplay[index]);
-      },
+    return Container(
+      child: ListView.separated(
+        itemCount: _mifasDisplay.length,
+        scrollDirection: Axis.vertical,
+        separatorBuilder: (context, index) => Divider(height: 0.5),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return _buildItem(context, _mifasDisplay[index]);
+        },
+      ),
     );
   }
 
@@ -208,65 +169,87 @@ class _MifaSelectorState extends State<MifaSelector> {
     );
   }
 
+  Widget _buildBack() {
+    return AwesomeButton(
+      width: 60,
+      blurRadius: 10.0,
+      splashColor: Colors.orange[400],
+      borderRadius: BorderRadius.circular(20),
+      onTap: widget.goBack,
+      color: Colors.orange[600],
+      child: Text(
+        "Retour",
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 14.0,
+          fontFamily: 'Apercu',
+        ),
+      ),
+    );
+  }
+
   Widget _buildConfirmMifa(BuildContext context) {
     return Expanded(
-      child: Column(
-        children: <Widget>[
-          Text(
-            'Sont-il les chats dont vous vous occupez ?',
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontFamily: 'Apercu',
-              fontSize: 24,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              'Sont-il les chats dont vous vous occupez ? 🤔',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontFamily: 'Apercu',
+                fontSize: 24,
+              ),
             ),
-          ),
-          _buildPetCarrousel(_mifaSelected.id),
-          SizedBox(height: 20),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              AwesomeButton(
-                blurRadius: 10.0,
-                splashColor: Colors.orange[400],
-                borderRadius: BorderRadius.circular(37.5),
-                onTap: () => {
-                  setState(() {
-                    _mifaSelected = null;
-                  })
-                },
-                color: Colors.orange[600],
-                child: Center(
-                  child: Text(
-                    "Non",
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 18.0,
-                      fontFamily: 'Apercu',
+            _buildPetCarrousel(_mifaSelected.id),
+            SizedBox(height: 20),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                AwesomeButton(
+                  blurRadius: 10.0,
+                  splashColor: Colors.orange[400],
+                  borderRadius: BorderRadius.circular(37.5),
+                  onTap: () => {
+                    setState(() {
+                      _mifaSelected = null;
+                    })
+                  },
+                  color: Colors.orange[600],
+                  child: Center(
+                    child: Text(
+                      "Non",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 18.0,
+                        fontFamily: 'Apercu',
+                      ),
                     ),
                   ),
                 ),
-              ),
-              AwesomeButton(
-                blurRadius: 10.0,
-                splashColor: Colors.orange[400],
-                borderRadius: BorderRadius.circular(37.5),
-                onTap: () => widget.onSelectMifa(_mifaSelected.id),
-                color: Colors.orange[600],
-                child: Center(
-                  child: Text(
-                    "Oui",
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 18.0,
-                      fontFamily: 'Apercu',
+                AwesomeButton(
+                  blurRadius: 10.0,
+                  splashColor: Colors.orange[400],
+                  borderRadius: BorderRadius.circular(37.5),
+                  onTap: () => widget.onSelectMifa(_mifaSelected.id),
+                  color: Colors.orange[600],
+                  child: Center(
+                    child: Text(
+                      "Oui",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 18.0,
+                        fontFamily: 'Apercu',
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -283,6 +266,55 @@ class _MifaSelectorState extends State<MifaSelector> {
       return _buildConfirmMifa(context);
     }
 
-    return Expanded(child: _buildContent(context));
+    if (_mifasDisplay.length == 0) {
+      return Container(
+        child: Column(
+          children: <Widget>[
+            Text(
+              "Aucune mifa a été trouver, peux-être est tu le premier à t'inscrire ? 😃",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontFamily: "Apercu",
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 10),
+            _buildAddMifa(context),
+            SizedBox(height: 30),
+            Text(
+              "sinon tu peux réessayer...",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontFamily: "Apercu",
+                fontSize: 12,
+              ),
+            ),
+            SizedBox(height: 10),
+            _buildBack(),
+          ],
+        ),
+      );
+    }
+    return Column(
+      children: <Widget>[
+        Text(
+          "Qui est-ce qui s'occupe du chat ? 😁",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontFamily: "Apercu",
+            fontSize: 16,
+          ),
+        ),
+        SizedBox(height: 20),
+        Divider(height: 0.5),
+        _buildContent(context),
+        Divider(height: 0.5),
+        SizedBox(height: 10),
+        _buildBack(),
+      ],
+    );
   }
 }

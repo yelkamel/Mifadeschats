@@ -1,18 +1,18 @@
-import 'dart:io';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:mifadeschats/data/notification/local_notification.dart';
-import 'package:mifadeschats/data/themes/app_themes.dart';
-import 'package:mifadeschats/data/themes/theme_changer.dart';
+import 'package:mifadeschats/app/sign_in/auth_bloc_provider.dart';
+import 'package:mifadeschats/widget/utils/restart_app.dart';
+import 'package:mifadeschats/services/singleton/locator.dart';
 import 'package:mifadeschats/splashscreen.dart';
 import 'package:provider/provider.dart';
-import 'package:mifadeschats/services/auth.dart';
+
+import 'themes/theme_changer.dart';
 
 void main() async {
+  setupLocator();
+
   WidgetsFlutterBinding.ensureInitialized();
 
   // Date formating init
@@ -24,81 +24,43 @@ void main() async {
 
   // Navigation color change
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.deepOrange,
+    systemNavigationBarColor: Colors.orangeAccent,
     systemNavigationBarIconBrightness: Brightness.light,
   ));
 
-  // Firebase Init
-  final FirebaseApp app = await FirebaseApp.configure(
-    name: 'mifadeschats',
-    options: FirebaseOptions(
-      googleAppID: Platform.isIOS
-          ? '1:736053778621:ios:0bee8f472c28d5e17effd4'
-          : '1:736053778621:android:29cebaabbcf852777effd4',
-      apiKey: 'AIzaSyAwMRk6Nj3oevO4HJ_nQ6LaBxZgoFh7svA',
-      projectID: 'mifadeschats',
-    ),
-  );
-  // END
-
-  //  Local Notification Init
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  var initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettingsIOS = IOSInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false);
-  var initializationSettings = InitializationSettings(
-      initializationSettingsAndroid, initializationSettingsIOS);
-  flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: null);
-  // END
-
-  runApp(MyApp(
-    app: app,
-    localNotificationPlugin: flutterLocalNotificationsPlugin,
+  runApp(RestartWidget(
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final FirebaseApp app;
   final FlutterLocalNotificationsPlugin localNotificationPlugin;
 
-  const MyApp({Key key, this.app, this.localNotificationPlugin})
-      : super(key: key);
+  const MyApp({Key key, this.localNotificationPlugin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<NotificationChanger>(
-      create: (_) => NotificationChanger(service: localNotificationPlugin),
-      child: ChangeNotifierProvider<ThemeChanger>(
-        create: (_) => ThemeChanger(appThemeData[AppTheme.OrangeLight]),
-        child: MyAppWithAppProvider(app: app),
-      ),
+    return ChangeNotifierProvider<ThemeChanger>(
+      create: (_) => ThemeChanger(),
+      child: MyAppWithAppProvider(),
     );
   }
 }
 
 class MyAppWithAppProvider extends StatelessWidget {
-  final FirebaseApp app;
-
-  const MyAppWithAppProvider({Key key, this.app}) : super(key: key);
+  const MyAppWithAppProvider({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeChanger>(context);
-    return Provider<AuthBase>(
-      create: (context) => Auth(),
+    return AuthBlocProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Mifa Des Chats',
         theme: theme.getTheme(),
         home: Container(
           color: Colors.orange[200],
-          child: SplashScreen(app: app),
+          child: SplashScreen(),
         ),
       ),
     );

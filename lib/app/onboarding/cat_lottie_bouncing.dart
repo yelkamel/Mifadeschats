@@ -45,7 +45,7 @@ class _CatLottieBouncingState extends State<CatLottieBouncing>
         height: widget.lottieSize,
         width: widget.lottieSize,
         child: FlareActor(
-          'assets/lottie/loading-cat.flr',
+          'assets/anitmation/rive/loading-cat.flr',
           alignment: Alignment.center,
           fit: BoxFit.contain,
           controller: widget.controls,

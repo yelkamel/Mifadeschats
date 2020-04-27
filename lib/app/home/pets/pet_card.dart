@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/components/button/touchable_particule.dart';
+import 'package:get_it/get_it.dart';
+import 'package:mifadeschats/widget/button/touchable_particule.dart';
 import 'package:mifadeschats/models/pet.dart';
-import 'package:mifadeschats/services/storage.dart';
-import 'package:provider/provider.dart';
+import 'package:mifadeschats/services/singleton/firebase_storage.dart';
 
 import 'pet_list_item.dart';
+
+GetIt getIt = GetIt.instance;
 
 class PetCardItem extends StatefulWidget {
   const PetCardItem({
@@ -28,7 +30,6 @@ class PetCardItem extends StatefulWidget {
           width: 300,
           child: Card(
             elevation: 8,
-            color: Theme.of(context).accentColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -63,9 +64,10 @@ class _PetCardItemState extends State<PetCardItem> {
 
   @override
   void didChangeDependencies() async {
-    final storage = Provider.of<Storage>(context);
-
-    storage.loadImage('/images/pets/${widget.pet.id}.png').then((res) {
+    getIt
+        .get<FirestoreStorage>()
+        .loadImage('/images/pets/${widget.pet.id}.png')
+        .then((res) {
       setState(() {
         _loading = false;
         _photoUrl = res;

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/components/avatar.dart';
-import 'package:mifadeschats/components/card/card_dark_mode_switch.dart';
-import 'package:mifadeschats/components/card/card_notification.dart';
-import 'package:mifadeschats/components/platform_alert_dialog.dart';
-import 'package:mifadeschats/data/themes/theme_changer.dart';
+import 'package:mifadeschats/app/sign_in/auth_bloc_provider.dart';
+import 'package:mifadeschats/widget/card/card_dark_mode_switch.dart';
+import 'package:mifadeschats/widget/card/card_notification.dart';
+import 'package:mifadeschats/widget/platform_alert_dialog.dart';
+import 'package:mifadeschats/widget/utils/restart_app.dart';
 import 'package:mifadeschats/models/user.dart';
-import 'package:mifadeschats/services/auth.dart';
 import 'package:provider/provider.dart';
 
 class AccountPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signOut();
+      final authbloc = AuthBlocProvider.of(context);
+      authbloc.signOut().then((res) {
+        RestartWidget.restartApp(context);
+      });
     } catch (e) {
       print(e.toString());
     }
@@ -30,19 +31,8 @@ class AccountPage extends StatelessWidget {
     }
   }
 
-  Widget _buildSwitchDark() {
-    return Container(
-      alignment: Alignment.center,
-      height: 50,
-      width: 100,
-      child: Container(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
-    final userAuth = Provider.of<UserAuth>(context, listen: false);
     final user = Provider.of<User>(context, listen: false);
     TextStyle textStyle = TextStyle(
       fontSize: 24,
@@ -68,23 +58,14 @@ class AccountPage extends StatelessWidget {
               onTap: () => _confirmSignOut(context),
             )
           ],
-          bottom: userAuth.photoUrl != null
-              ? PreferredSize(
-                  preferredSize: Size.fromHeight(100),
-                  child: _builderUserInfo(userAuth, user),
-                )
-              : null,
+          bottom: null,
         ),
         body: Column(
           children: <Widget>[
             CardDarkModeSwitch(
-              value: _themeChanger.isDark(),
-              onTap: (value) => _themeChanger.switchToDark(value),
+              onTap: () {},
             ),
-            CardNotification(
-              value: true,
-              onTap: (value) => value,
-            )
+            CardNotification()
           ],
         )
 
@@ -109,16 +90,5 @@ class AccountPage extends StatelessWidget {
         },
       ), */
         );
-  }
-
-  Widget _builderUserInfo(UserAuth userAuth, User user) {
-    return Column(children: [
-      if (userAuth.photoUrl != null)
-        Avatar(
-          photoUrl: userAuth.photoUrl,
-          radius: 50,
-        ),
-      SizedBox(height: 8),
-    ]);
   }
 }

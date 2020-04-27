@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mifadeschats/components/list/carrousel_items_builder.dart';
+import 'package:mifadeschats/widget/list/carrousel_items_builder.dart';
 import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/pet.dart';
 
 import 'package:mifadeschats/app/home/pets/edit_pet_page.dart';
 import 'package:mifadeschats/app/home/pets/pet_card.dart';
-import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/widget/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';

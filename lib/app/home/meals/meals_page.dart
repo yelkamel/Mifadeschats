@@ -4,16 +4,15 @@ import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:mifadeschats/app/home/meals/meal_calendar.dart';
 import 'package:mifadeschats/app/home/meals/pet_state.dart';
-import 'package:mifadeschats/components/button/awesome_button.dart';
-import 'package:mifadeschats/components/list/list_items_builder.dart';
-import 'package:mifadeschats/components/reponsive_safe_area.dart';
-import 'package:mifadeschats/data/notification/local_notification.dart';
+import 'package:mifadeschats/widget/button/awesome_button.dart';
+import 'package:mifadeschats/widget/list/list_items_builder.dart';
+import 'package:mifadeschats/widget/utils/reponsive_safe_area.dart';
 import 'package:mifadeschats/models/meal.dart';
 import 'package:mifadeschats/models/mifa.dart';
+import 'package:mifadeschats/services/singleton/local_notification.dart';
 import 'package:provider/provider.dart';
 import 'package:mifadeschats/services/database.dart';
 
-import 'edit_meal_page.dart';
 import 'meal_item.dart';
 
 class MealsPage extends StatefulWidget {
@@ -27,11 +26,10 @@ class _MealsPageState extends State<MealsPage> {
   Timer _timer;
 
   Future _showNotification(BuildContext context) async {
-    final notificationService =
-        Provider.of<NotificationChanger>(context, listen: false);
+    final localNotification = getIt.get<LocalNotification>();
 
-    if (notificationService.allowNotification) {
-      await notificationService.setNotification();
+    if (localNotification.allowNotification) {
+      await localNotification.setNotification();
     }
   }
 
@@ -50,7 +48,6 @@ class _MealsPageState extends State<MealsPage> {
   @override
   void initState() {
     super.initState();
-
     startAnimation();
   }
 
@@ -106,33 +103,6 @@ class _MealsPageState extends State<MealsPage> {
     );
   }
 
-  Widget _buildGreatMealButton(
-      BuildContext context, Database database, Size size) {
-    return Positioned(
-      child: AwesomeButton(
-        blurRadius: 10.0,
-        splashColor: Theme.of(context).buttonColor,
-        borderRadius: BorderRadius.circular(37.5),
-        height: 40.0,
-        width: 100,
-        onTap: () {
-          EditMealPage.show(context: context);
-        },
-        color: Colors.orange[600],
-        child: Text(
-          "Miam",
-          style: TextStyle(
-            color: Theme.of(context).accentColor,
-            fontFamily: 'Apercu',
-            fontSize: 14,
-          ),
-        ),
-      ),
-      bottom: size.height / 9,
-      left: size.width / 9,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final database = Provider.of<Database>(context);
@@ -141,7 +111,7 @@ class _MealsPageState extends State<MealsPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 70),
+        preferredSize: const Size(double.infinity, 100),
         child: SafeArea(
           child: MealCalendar(
             mifa: mifa,
@@ -166,9 +136,7 @@ class _MealsPageState extends State<MealsPage> {
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: PetState(
-            controls: _controls,
-          ),
+          child: PetState(controls: _controls),
         ),
         Expanded(
           flex: 3,

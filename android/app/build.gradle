@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         applicationId "com.layouceferie.mifadeschats"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

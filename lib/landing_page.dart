@@ -20,23 +20,23 @@ class _LandingPageState extends State<LandingPage> {
     final database = Provider.of<Database>(context);
     final user = Provider.of<User>(context);
 
-    var mifa = await database.getMifa(user.mifaId);
-    setState(() {
-      _loading = false;
-      _mifa = mifa;
-    });
+    if (user != null) {
+      var mifa = await database.getMifa(user.mifaId);
+      setState(() {
+        _loading = false;
+        _mifa = mifa;
+      });
+    } else {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print('LandingPage');
-
     final database = Provider.of<Database>(context);
     final user = Provider.of<User>(context);
-
-    if (user == null || user.mifaId == null) {
-      return OnBoarding(database: database);
-    }
 
     if (_loading) {
       return Center(
@@ -45,6 +45,10 @@ class _LandingPageState extends State<LandingPage> {
         width: 200,
         child: CircularProgressIndicator(),
       ));
+    }
+
+    if (_mifa == null) {
+      return OnBoarding(database: database);
     }
 
     return StreamProvider<Mifa>(

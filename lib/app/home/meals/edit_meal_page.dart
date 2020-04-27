@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mifadeschats/components/date_time_picker.dart';
+import 'package:mifadeschats/widget/utils/date_time_picker.dart';
 import 'package:mifadeschats/models/meal.dart';
 import 'package:mifadeschats/models/mifa.dart';
-import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/widget/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/services/database.dart';
 import 'package:provider/provider.dart';
 

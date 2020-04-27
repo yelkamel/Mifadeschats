@@ -1,18 +1,14 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
 
-import 'package:lottie/lottie.dart';
-import 'package:mifadeschats/app/home/pets/edit_pet_page.dart';
-import 'package:mifadeschats/components/animation/fade_in.dart';
-import 'package:mifadeschats/components/button/awesome_button.dart';
-import 'package:mifadeschats/components/reponsive_safe_area.dart';
+import 'package:mifadeschats/widget/animation/fade_in.dart';
+import 'package:mifadeschats/widget/input/fade_text_input.dart';
+import 'package:mifadeschats/widget/utils/reponsive_safe_area.dart';
 import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/user.dart';
 import 'package:mifadeschats/services/database.dart';
 
 import 'cat_lottie_bouncing.dart';
-import 'fade_text_input.dart';
 import 'mifa_selector.dart';
 
 class OnBoarding extends StatefulWidget {

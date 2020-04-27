@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mifadeschats/models/meal.dart';
 import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/services/database.dart';
+import 'package:mifadeschats/utils/format.dart';
 
 class MealCalendar extends StatefulWidget {
   final Database database;
@@ -14,8 +15,7 @@ class MealCalendar extends StatefulWidget {
 }
 
 class _MealCalendarState extends State<MealCalendar> {
-  bool _loading = true;
-  DateTime _startDate = DateTime.now().subtract(Duration(days: 999));
+  DateTime _startDate = DateTime.now().subtract(Duration(days: 99));
   DateTime _endDate = DateTime.now();
   DateTime _selectedDate = DateTime.now();
   List<DateTime> _markedDates = [];
@@ -31,16 +31,13 @@ class _MealCalendarState extends State<MealCalendar> {
     List<DateTime> mealsDates = meals.map((Meal meal) => meal.date).toList();
 
     setState(() {
-      _loading = false;
       _markedDates = mealsDates;
       _startDate = mealsDates.first;
     });
   }
 
   Widget _monthNameWidget(monthName) {
-    return Container(
-      height: 10,
-    );
+    return Container(height: 10);
   }
 
   Widget _getMarkedIndicatorWidget() {
@@ -61,11 +58,12 @@ class _MealCalendarState extends State<MealCalendar> {
     double opacity = isDateOutOfRange ? 0.4 : 1;
     Color fontColor = Theme.of(context).primaryColor;
     TextStyle normalStyle =
-        TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: fontColor);
+        TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: fontColor);
     TextStyle selectedStyle = TextStyle(
-        fontSize: 17, fontWeight: FontWeight.w800, color: Colors.white70);
+        fontSize: 15, fontWeight: FontWeight.w800, color: Colors.white70);
     List<Widget> _children = [
-      Text(dayName, style: isSelectedDate ? selectedStyle : normalStyle),
+      Text(Format.dayOfWeek(date),
+          style: isSelectedDate ? selectedStyle : normalStyle),
       Text(date.day.toString(),
           style: isSelectedDate ? selectedStyle : normalStyle),
     ];
@@ -95,18 +93,17 @@ class _MealCalendarState extends State<MealCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: CalendarStrip(
-        addSwipeGesture: true,
-        startDate: _startDate,
-        endDate: _endDate,
-        onDateSelected: _onSelect,
-        dateTileBuilder: _dateTileBuilder,
-        iconColor: Theme.of(context).accentColor,
-        monthNameWidget: _monthNameWidget,
-        markedDates: _markedDates,
-        // containerDecoration: BoxDecoration(color: Colors.black12),
-      ),
+    return CalendarStrip(
+      addSwipeGesture: true,
+      startDate: _startDate,
+      endDate: _endDate,
+      onDateSelected: _onSelect,
+      selectedDate: _selectedDate,
+      dateTileBuilder: _dateTileBuilder,
+      iconColor: Theme.of(context).accentColor,
+      monthNameWidget: _monthNameWidget,
+      markedDates: _markedDates,
+      containerHeight: 100,
     );
   }
 }

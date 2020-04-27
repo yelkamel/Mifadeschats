@@ -1,4 +1,3 @@
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class Format {
@@ -10,7 +9,7 @@ class Format {
   }
 
   static String date(DateTime date) {
-      return DateFormat.MMMd('fr').format(date);
+    return DateFormat.MMMd('fr').format(date);
   }
 
   static String time(DateTime date) {
@@ -18,7 +17,7 @@ class Format {
   }
 
   static String dayOfWeek(DateTime date) {
-    return DateFormat.E().format(date);
+    return DateFormat.E('fr').format(date);
   }
 
   static String currency(double pay) {

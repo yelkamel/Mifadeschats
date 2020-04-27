@@ -1,167 +1,159 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:mifadeschats/app/sign_in/email_sign_in_page.dart';
-import 'package:mifadeschats/app/sign_in/sign_in_manager.dart';
-import 'package:mifadeschats/app/sign_in/sign_in_button.dart';
-import 'package:mifadeschats/app/sign_in/social_sign_in_button.dart';
-import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
-import 'package:mifadeschats/services/auth.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mifadeschats/app/sign_in/auth_bloc.dart';
+import 'package:mifadeschats/app/sign_in/auth_bloc_provider.dart';
+import 'package:mifadeschats/app/sign_in/sign_in_wait_email.dart';
+import 'package:mifadeschats/widget/input/fade_text_input.dart';
+import 'package:mifadeschats/widget/utils/reponsive_safe_area.dart';
 
-class SignInPage extends StatelessWidget {
-  const SignInPage({
-    Key key,
-    @required this.manager,
-    @required this.isLoading,
-  }) : super(key: key);
-  final SignInManager manager;
-  final bool isLoading;
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
 
-  static Widget create(BuildContext context) {
-    final auth = Provider.of<AuthBase>(context);
-    return ChangeNotifierProvider<ValueNotifier<bool>>(
-      create: (_) => ValueNotifier<bool>(false),
-      child: Consumer<ValueNotifier<bool>>(
-        builder: (_, isLoading, __) => Provider<SignInManager>(
-          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
-          child: Consumer<SignInManager>(
-            builder: (context, manager, _) => SignInPage(
-              manager: manager,
-              isLoading: isLoading.value,
-            ),
-          ),
-        ),
-      ),
-    );
+class _SignInPageState extends State<SignInPage> {
+  bool _isCatVisible = false;
+  AuthBloc _bloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _bloc = AuthBlocProvider.of(context);
+    this.initDynamicLinks();
+
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        _isCatVisible = true;
+      });
+    });
   }
 
-  void _showSignInError(BuildContext context, PlatformException exception) {
-    PlatformExceptionAlertDialog(
-      title: 'Sign in failed',
-      exception: exception,
-    ).show(context);
+  @override
+  void dispose() {
+    // let bloc know to close all the streams
+    _bloc.dispose();
+    super.dispose();
   }
 
-  Future<void> _signInAnonymously(BuildContext context) async {
-    try {
-      await manager.signInAnonymously();
-    } on PlatformException catch (e) {
-      _showSignInError(context, e);
-    }
-  }
-
-  Future<void> _signInWithGoogle(BuildContext context) async {
-    try {
-      await manager.signInWithGoogle();
-    } on PlatformException catch (e) {
-      if (e.code != 'ERROR_ABORTED_BY_USER') {
-        _showSignInError(context, e);
-      }
-    }
-  }
-
-  Future<void> _signInWithAppleStore(BuildContext context) async {
-    try {
-      await manager.signInWithAppleStore();
-    } on PlatformException catch (e) {
-      if (e.code != 'ERROR_ABORTED_BY_USER') {
-        _showSignInError(context, e);
-      }
-    }
-  }
-
-  Future<void> _signInWithFacebook(BuildContext context) async {
-    try {
-      await manager.signInWithFacebook();
-    } on PlatformException catch (e) {
-      if (e.code != 'ERROR_ABORTED_BY_USER') {
-        _showSignInError(context, e);
-      }
-    }
-  }
-
-  void _signInWithEmail(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        fullscreenDialog: true,
-        builder: (context) => EmailSignInPage(),
-      ),
-    );
+  void _authenticateUserWithEmail() {
+    _bloc.sendSignInWithEmailLink().whenComplete(() => _bloc
+        .storeUserEmail()
+        .whenComplete(() => _bloc.changeAuthStatus(AuthStatus.emailLinkSent)));
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    print("SignPage");
+
+    return Container(
       child: Scaffold(
-        body: _buildContent(context),
-        backgroundColor: Theme.of(context).backgroundColor,
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.orange[200],
+        body: ResponsiveSafeArea(builder: (context, size) {
+          return Column(
+            children: <Widget>[
+              SizedBox(height: size.height * 0.1),
+              Text(
+                "Connexion",
+                style: TextStyle(
+                    fontFamily: "Apercu",
+                    fontSize: 30,
+                    color: Theme.of(context).primaryColor),
+              ),
+              SizedBox(height: size.height * 0.1),
+              _buildForm(),
+            ],
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(40.0),
+  Widget _buildForm() {
+    return Container(
+      padding: EdgeInsets.all(10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SizedBox(
-            height: 50.0,
-            child: _buildHeader(context),
-          ),
-          SizedBox(height: 48.0),
-          SocialSignInButton(
-            assetName: 'assets/images/google-logo.png',
-            text: 'Google',
-            textColor: Colors.black54,
-            color: Colors.white,
-            onPressed: isLoading ? null : () => _signInWithGoogle(context),
-          ),
-          SizedBox(height: 8.0),
-          SocialSignInButton(
-            assetName: 'assets/images/facebook-logo.png',
-            text: 'Facebook',
-            textColor: Colors.white70,
-            color: Color(0xFF334D92),
-            onPressed: isLoading ? null : () => _signInWithFacebook(context),
-          ),
-          SizedBox(height: 8.0),
-          SocialSignInButton(
-            assetName: 'assets/images/apple-logo.png',
-            text: 'Apple',
-            textColor: Colors.black87,
-            color: Colors.grey[300],
-            onPressed: isLoading ? null : () => _signInWithAppleStore(context),
-          ),
-          SizedBox(height: 8.0),
-          SignInButton(
-            text: 'Email',
-            textColor: Theme.of(context).canvasColor,
-            color: Theme.of(context).accentColor,
-            onPressed: isLoading ? null : () => _signInWithEmail(context),
-          ),
-          SizedBox(height: 8.0),
+          StreamBuilder(
+              stream: _bloc.authStatus,
+              builder: (context, snapshot) {
+                switch (snapshot.data) {
+                  case (AuthStatus.emailAuth):
+                    return _authForm(true);
+                    break;
+                  case (AuthStatus.phoneAuth):
+                    return _authForm(false);
+                    break;
+                  case (AuthStatus.emailLinkSent):
+                    return SignInWaitEmail();
+                    break;
+                  case (AuthStatus.isLoading):
+                    return Center(child: CircularProgressIndicator());
+                    break;
+                  default:
+                    // By default we will show the email auth form
+                    return _authForm(true);
+                    break;
+                }
+              })
         ],
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    if (isLoading) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    return Text(
-      'Connexion',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 34.0,
-        fontWeight: FontWeight.w600,
-        color: Theme.of(context).primaryColor,
-        fontFamily: 'Apercu',
+  Widget _emailInputField(String error) {
+    return FadeTextField(
+      hintText: "Email",
+      onChanged: _bloc.changeEmail,
+      keyboardType: TextInputType.emailAddress,
+      onSubmitEditing: _authenticateUserWithEmail,
+      unFocusOnSubmit: true,
+    );
+  }
+
+  Widget _authForm(bool isEmail) {
+    return StreamBuilder(
+      stream: _bloc.email,
+      builder: (context, snapshot) {
+        return Column(children: <Widget>[
+          _emailInputField(snapshot.error),
+          SizedBox(height: 32),
+          Container(height: 100, child: _buildInputType(isEmail)),
+        ]);
+      },
+    );
+  }
+
+  Widget _buildInputType(isEmail) {
+    return AnimatedOpacity(
+      duration: Duration(seconds: 1),
+      opacity: _isCatVisible ? 1 : 0,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          GestureDetector(
+            onTap: _authenticateUserWithEmail,
+            child: Lottie.asset("assets/animation/lottie/waiting-cat.json"),
+          ),
+        ],
       ),
     );
+  }
+
+  void initDynamicLinks() async {
+    final PendingDynamicLinkData data =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri deepLink = data?.link;
+    print("NEW LINK");
+
+    if (deepLink != null) {
+      print("=> deeplink: $deepLink");
+      _bloc.changeAuthStatus(AuthStatus.isLoading);
+      _bloc.signInWIthEmailLink(
+          await _bloc.getUserEmailFromStorage(), deepLink.toString());
+    }
   }
 }

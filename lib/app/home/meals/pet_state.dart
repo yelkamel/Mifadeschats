@@ -1,7 +1,6 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flare_flutter/flare_controls.dart';
 import 'package:flutter/material.dart';
-import 'package:mifadeschats/models/meal.dart';
 import 'package:mifadeschats/models/mifa.dart';
 import 'package:provider/provider.dart';
 
@@ -13,9 +12,9 @@ enum PetStatus {
 }
 
 Map<PetStatus, String> FlareByStatus = {
-  PetStatus.Angry: 'assets/lottie/angry-cat.flr',
-  PetStatus.NotAngry: 'assets/lottie/bad-cat.flr',
-  PetStatus.Think: 'assets/lottie/loading-cat.flr',
+  PetStatus.Angry: 'assets/animation/rive/angry-cat.flr',
+  PetStatus.NotAngry: 'assets/animation/rive/bad-cat.flr',
+  PetStatus.Think: 'assets/animation/rive/loading-cat.flr',
 };
 
 class PetState extends StatelessWidget {

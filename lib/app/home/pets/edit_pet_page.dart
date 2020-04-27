@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter/services.dart';
-import 'package:mifadeschats/components/button/touchable_particule.dart';
-import 'package:mifadeschats/components/photo/image_capture.dart';
+import 'package:mifadeschats/widget/button/touchable_particule.dart';
+import 'package:mifadeschats/widget/photo/image_capture.dart';
 import 'package:mifadeschats/models/mifa.dart';
 import 'package:mifadeschats/models/pet.dart';
-import 'package:mifadeschats/components/platform_alert_dialog.dart';
-import 'package:mifadeschats/components/platform_exception_alert_dialog.dart';
+import 'package:mifadeschats/widget/platform_alert_dialog.dart';
+import 'package:mifadeschats/widget/platform_exception_alert_dialog.dart';
 import 'package:mifadeschats/navigation/fade_page_route.dart';
 import 'package:mifadeschats/services/database.dart';
 import 'package:provider/provider.dart';
